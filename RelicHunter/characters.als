@@ -102,10 +102,10 @@ look.room {
   ; $1 = user
 
   ; get zone
-  var %look.zone $get.zone($1)
+  set %look.zone $get.zone($1)
 
   ; get room
-  var %look.room $get.room($1)
+  set %look.room $get.room($1)
 
   ; Get zone + room
   var %look.zone.and.room $get.zone.and.room($1)
@@ -121,10 +121,11 @@ look.room {
   msg =$nick 10Exits:12 %look.exits
 
   ; Are there any items in the room?
-  var %look.items $readini($zone(%look.zone), %look.room, Items)
-  if (%look.items != $null) {  
-    %look.items = $replace(%look.items, $chr(046), $chr(044) $chr(032)) 
+  if ($readini($zone(%look.zone), %look.room, Items) != $null) {  
+    $look.room.items($1)
+
     msg =$nick 10Items laying here:12 %look.items
+    unset %look.items
   }
 
   ; Are there any online players in the room?
@@ -144,10 +145,34 @@ look.room {
     msg =$nick 10Other players here:12 %players.in.room
   }
 
-  unset %players.in.room
-
   ; Show weather, time of day and moon
 
+  unset %players.in.room | unset %look.zone | unset %look.room
+
+}
+look.room.items {
+  var %room.item.list $readini($zone(%look.zone), %look.room, Items)
+
+  echo -a room list: %room.item.list
+
+  var %value.item 1 | var %number.of.items $numtok(%room.item.list,46)
+
+  echo -a number of items: %number.of.items
+
+  while (%value.item <= %number.of.items) {
+    var %item.name $gettok(%room.item.list, %value.item, 46)
+    var %item.amount $readini($zone(%look.zone), %look.room,%item.name)
+
+    if (%item.amount = $null) { var %item.amount 1 }
+
+    ; add the item and the amount to the item list
+    var %item_to_add %item.name $+ $chr(040) $+ %item.amount $+ $chr(041) 
+    %look.items = $addtok(%look.items,%item_to_add,46)
+
+    inc %value.item 1 
+  }
+
+  %look.items = $replace(%look.items, $chr(046), $chr(044) $chr(032)) 
 }
 
 look.target {
