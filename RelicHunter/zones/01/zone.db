@@ -56,13 +56,25 @@ ROOMS go below this line
 Name=The Void
 Desc=You open your eyes and find yourself in a bright white area. A loud voice echos in your mind.  "You are without form. Your first order of business is to choose a race for yourself. North for Human, East for Elf, South for a creature made from Science. Use go to move through the portal of the race you relate to."  You may also use !help racename for more information on the races.
 
-North=writeini $char($nick) location room 0:0:4 | /setrace $nick Human
-East=writeini $char($nick) location room 0:0:4 | /setrace $nick Elf
-South=writeini $char($nick) location room 0:0:4 | /setrace $nick ScienceCreation
-West=
+
+; Exits
+
+North=0:0:4
+East=0:0:4
+South=0:0:4
+
+; Exit Actions
+
+NorthAction=/setrace $nick Human
+EastAction=/setrace $nick Elf
+SouthAction=/setrace $nick ScienceCreation
+WestAction=
+
+; Room Items
 
 Items=
 
+; Room Flags
 CanDig=false
 Shop=false
 WarmthNeeded=-100
