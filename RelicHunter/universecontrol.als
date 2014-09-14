@@ -78,7 +78,6 @@ moonphase.bloodmoon {
   if (%curse.chance <= %bloodmoon.chance) { 
     set %bloodmoon on 
     set %moonphase Blood
-    writeini battlestats.dat TempBattleInfo Event BloodMoon
     writeini $zone($1) moonphase CurrentMoonPhase Blood
     writeini $zone($1) moonphase currentMoonTurn 1
   }

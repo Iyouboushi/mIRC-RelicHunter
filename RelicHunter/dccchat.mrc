@@ -13,11 +13,11 @@ on 2:open:=: {
 
   while ($chat(%p) != $null) { 
 
-    ; Build the character description
+    ; Build the character description (to be added)
     ; msg = $+ $chat(%p) 10 $+ %real.name  $+  $readini($char($nick), Descriptions, Char) 
 
     if ($chat(%p) == $nick) { inc %p 1 }
-    else {  msg = $+ $chat(%p) 14###4 $nick has entered the universe at %where $+ . | inc %p 1 }
+    else {  msg = $+ $chat(%p) 14###4 $nick has entered the universe on planet %where $+ . | inc %p 1 }
   }
 
   $dcc.who'sonline($nick)
@@ -97,9 +97,8 @@ alias dcc.status.messages {
 alias dcc.private.message {
   ; $1 = person
   ; $2 = message
-
   var %p 1
-  while ($chat(%p) != $null) {  var %nick $chat(%p) | var %system.message $1
+  while ($chat(%p) != $null) {  var %nick $chat(%p)
     if ($chat(%p) = $1) { msg = $+ $chat(%p) $2 }
     inc %p 1 
   } 
@@ -142,20 +141,17 @@ on 2:Chat:emote *: { $dcc.emote($nick, $2-) }
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; speaking commands
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-on 2:Chat:say *: {  $say($nick,$2-) }
+on 2:Chat:say *: { $say($nick,$2-) }
 on 2:Chat:shout *: {  $shout($nick,$2-) }
 on 2:Chat:global *: {  $global($nick,$2-) }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; This is how the bot can do
-; regular chatting, non-cmds.
-; It has to go at the bottom 
-; of the file to work right. 
+; This isn't working quite right
+; in version 6.3 but will
+; leave it up for now.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 on 2:CHAT:*:{ unset %^p
-
   if ($1 = ACTION) { $dcc.emote($nick, $2-) }
-  else { $say($nick, $1-) }
 }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -166,13 +162,14 @@ on 2:CHAT:*:{ unset %^p
 alias say {
   ; $1 = person talking 
   ; $2 = message
+
   var %user.location $get.zone.and.room($1)
   var %chat.p 1
   while ($chat(%chat.p) != $null) {  var %nick $chat(%chat.p) 
-    if (%nick = $nick) { inc %chat.p 1 }
-    else {
+
+    if (%nick != $1) {
       var %target.location $get.zone.and.room(%nick)
-      if (%target.location = %user.location) { msg = $+ $chat(%chat.p) 4 < $+ $1 $+ > 12 $+ $2- }
+      if (%target.location = %user.location) { msg = $+ $chat(%chat.p) 4< $+ $1 $+ > 12 $+ $2- }
     }
     inc %chat.p 1
   } 
@@ -184,10 +181,9 @@ alias shout {
   var %user.location $get.zone($1)
   var %shout.chat.p 1
   while ($chat(%shout.chat.p) != $null) {  var %nick $chat(%shout.chat.p) 
-    if (%nick = $nick) { inc %shout.chat.p 1 }
-    else {
+    if (%nick != $1) {
       var %target.location $get.zone(%nick)
-      if (%target.location = %user.location) { msg = $+ $chat(%shout.chat.p) 4 [Shout] < $+ $1 $+ > 12 $+ $2- }
+      if (%target.location = %user.location) { msg = $+ $chat(%shout.chat.p) 4[Zone] < $+ $1 $+ > 12 $+ $2- }
     }
     inc %shout.chat.p 1
   } 
@@ -200,8 +196,7 @@ alias global {
   var %user.location $get.zone($1)
   var %chat.p 1
   while ($chat(%chat.p) != $null) {  var %nick $chat(%chat.p) 
-    if (%nick = $nick) { inc %chat.p 1 }
-    else { msg = $+ $chat(%chat.p) 4[ $+ $readini($zone(%user.location), info, name) $+ $chr(93) < $+ $1 $+ > 12 $+ $2-   }
+    if (%nick != $1) { msg = $+ $chat(%chat.p) 4[ $+ Global $+ $chr(93) < $+ $1 $+ > 12 $+ $2-   }
     inc %chat.p 1
   } 
 }
@@ -212,8 +207,7 @@ alias dcc.emote {
   var %user.location $readini($char($1), Location, Zone) $+ : $+ $readini($char($1), Location, Room)
   var %chat.p 1
   while ($chat(%chat.p) != $null) {  var %nick $chat(%chat.p) 
-    if (%nick = $nick) { inc %chat.p 1 }
-    else {
+    if (%nick != $nick) { 
       var %target.location $readini($char(%nick), Location, Zone) $+ : $+ $readini($char(%nick), Location, Room)
       if (%target.location = %user.location) { msg = $+ $chat(%chat.p) 13*7 $nick 12 $+ $2- $+ 13 * }
     }
