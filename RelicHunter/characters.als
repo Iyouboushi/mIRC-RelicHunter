@@ -16,6 +16,7 @@ gender3 {
 }
 race { return $readini($char($1), info, race) }
 setrace {
+
   if ($2 = human) {
     writeini $char($1) info race Human
     writeini $char($1) basestats hp 30
@@ -52,8 +53,8 @@ setrace {
     writeini $char($1) basestats agi 9
   }
 
-  writeini $char($1) battle hunger 100
-  writeini $char($1) battle warmth 1
+  writeini $char($1) currentstats hunger 100
+  writeini $char($1) currentstats warmth 1
   $fulls($1)
 }
 
@@ -98,11 +99,54 @@ weapon.equipped {
 }
 
 look.room {
+  ; $1 = user
+
   ; get zone
+  var %look.zone $get.zone($1)
 
   ; get room
+  var %look.room $get.room($1)
+
+  ; Get zone + room
+  var %look.zone.and.room $get.zone.and.room($1)
 
   ; build the room desc and show it
+  msg =$nick 12[ $+ $readini($zone(%look.zone), %look.room, name) $+  ]
+  msg =$nick 3 $+ $readini($zone(%look.zone), %look.room, desc)
+
+  var %look.exits $readini($zone(%look.zone), %look.room, ExitList)
+  if (%look.exits != $null) {  %look.exits = $replace(%look.exits, $chr(046), $chr(044) $chr(032)) }
+  if (%look.exits = $null) { var %look.exits none that you can see }
+
+  msg =$nick 10Exits:12 %look.exits
+
+  ; Are there any items in the room?
+  var %look.items $readini($zone(%look.zone), %look.room, Items)
+  if (%look.items != $null) {  
+    %look.items = $replace(%look.items, $chr(046), $chr(044) $chr(032)) 
+    msg =$nick 10Items laying here:12 %look.items
+  }
+
+  ; Are there any online players in the room?
+  var %user.location $get.zone.and.room($1)
+  var %chat.look 1
+  while ($chat(%chat.look) != $null) {  var %nick $chat(%chat.look) 
+    if (%nick != $nick) {
+      var %target.location $get.zone.and.room(%nick)
+      if (%target.location = %user.location) { %players.in.room = $addtok(%players.in.room, %nick, 46) }
+    }
+    inc %chat.look 1
+  } 
+
+  if (%players.in.room != $null) {
+    var %replacechar $chr(044) $chr(032)
+    %players.in.room = $replace(%players.in.room, $chr(046), %replacechar)
+    msg =$nick 10Other players here:12 %players.in.room
+  }
+
+  unset %players.in.room
+
+  ; Show weather, time of day and moon
 
 }
 

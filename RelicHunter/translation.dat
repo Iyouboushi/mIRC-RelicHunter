@@ -193,7 +193,11 @@ AccessCommandRemove=$chr(3) $+ 3 $+ Your character can be no longer be control
 AccessCommandAdd=$chr(3) $+ 3 $+ Your character can be now be controlled by $3
 GainedJobPoint=$chr(3) $+ 7 $+ You have gained 1 job point bringing your new total to %current.jobpoints $+ .
 Starving=$chr(3) $+ 4 $+ You are currently starving and will not regenerate HP naturally.  Find some food!
-
+ShowRace=$chr(3) $+ 3 $+ You are $race($nick) 
+ShowGender=$chr(3) $+ 3 $+ You are $iif($gender($nick) = his, male, $iif($gender($nick) = her, female, other gender)) 
+CurrentPOS=$chr(3) $+ 7 $+ Your current Galactic POS is:  $get.zone.and.room($nick)
+MovedToNewRoom=$chr(3) $+ 3 $+ $readini($char($1), basestats, name) has gone $2
+ArrivedToRoom=$chr(3) $+ 3 $+ $readini($char($1), basestats, name) has arrived here.
 
 =======================
 Health Titles
@@ -248,6 +252,10 @@ Error Messages
 =======================
 
 [Errors]
+Can'tSeeWeather=$chr(3) $+ 4 $+ You're unable to see the current weather from this location. 
+Can'tSeeMoon=$chr(3) $+ 4 $+ You're unable to see the current moon from this location.
+Can'tSeeTimeOfDay=$chr(3) $+ 4 $+ You're unable to see the current time of day from this location.
+NotValidExit=$chr(3) $+ 4 $+ You're unable to go in that direction from here.
 Can'tDualWield=$chr(3) $+ 4 $+ Error: %real.name does not have the necessary skill to dual wield.
 WeaponAlreadyEquipped=$chr(3) $+ 4 $+ Error: %real.name is already using that weapon.
 Using2HWeapon=$chr(3) $+ 4 $+ Error: Your current weapon is currently a 2 handed weapon.

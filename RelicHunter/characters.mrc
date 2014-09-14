@@ -121,10 +121,10 @@ ON 2:Chat:!setgender *: { $checkscript($2-)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 on 2:Chat:!hp*: { 
   $set_chr_name($nick) | $hp_status_hpcommand($nick) 
-  $dcc.global.message($readini(translation.dat, system, ViewMyHP))
+  $dcc.private.message($nick,$readini(translation.dat, system, ViewMyHP))
 
   if ($person_in_mech($nick) = true) { var %mech.name $readini($char($nick), mech, name) | $hp_mech_hpcommand($nick) 
-    $dcc.global.message($readini(translation.dat, system, ViewMyMechHP))
+    $dcc.private.message($nick,$readini(translation.dat, system, ViewMyMechHP))
   }
 
   unset %real.name | unset %hstats
@@ -156,6 +156,10 @@ on 2:Chat:!techs*: {
 
 on 2:Chat:!skills*: {
 }
+
+on 2:Chat:!race: { $dcc.private.message($nick, $readini(translation.dat, system, showrace))  }
+on 2:Chat:!gender: { $dcc.private.message($nick, $readini(translation.dat, system, showgender))  }
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Equipment Commands
@@ -192,7 +196,7 @@ on 2:Chat:up: { $go($nick,up }
 on 2:Chat:!weather*: {  
   ; get current room/zone and see if that location is inside.  If so, don't show.  If not, show weather.
   var %weather.zone $get.zone($nick) | var %weather.room $get.room($nick)
-  if ($readini($zone(%weather.zone), %weather.room, inside) = true) { }
+  if ($readini($zone(%weather.zone), %weather.room, inside) = true) {  $dcc.private.message($nick, $readini(translation.dat, errors, Can'tSeeWeather))  | halt }
   $dcc.private.message($nick, $readini(translation.dat, battle, CurrentWeather)) 
 }
 
@@ -207,7 +211,16 @@ on 2:Chat:!time*: {
   $dcc.private.message($nick, $readini(translation.dat, battle, CurrentTime)) 
 }
 
-on 2:Chat:!look*: {
+on 2:Chat:!pos: {  $dcc.private.message($nick, $readini(translation.dat, system, CurrentPOS)) }
+on 2:Chat:!look: { $look.room($nick) }
+
+on 2:Chat:!look at*: {
+  ; Is it a person in the same room?
+
+  ; Check for inventory object
+
+  ; Finally, return that nothing was found.
+
 }
 
 
