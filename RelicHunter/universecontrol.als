@@ -147,7 +147,9 @@ game.tick {
       if (%current.hunger < 0) { var %current.hunger 0 }
       writeini $char(%gametick.nick) currentstats hunger %current.hunger
 
-      if (%current.hunger <= 10) { $dcc.private.message(%gametick.nick, $readini(translation.dat, system, starving))  }
+      if (%current.hunger <= 10) { 
+        if ($readini($char(%gametick.nick), settings, showhunger) = true) { $dcc.private.message(%gametick.nick, $readini(translation.dat, system, starving))  }
+      }
     }
 
     inc %chat.gametick 1

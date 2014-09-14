@@ -132,7 +132,13 @@ on 2:Chat:!hp*: {
 
 on 2:Chat:!tp*: { 
   $set_chr_name($nick) 
-  $dcc.global.message($readini(translation.dat, system, ViewMyTP))
+  $dcc.private.message($nick,$readini(translation.dat, system, ViewMyTP))
+  unset %real.name
+}
+
+on 2:Chat:!hunger*: { 
+  $set_chr_name($nick) 
+  $dcc.private.message($nick,$readini(translation.dat, system, ViewMyHunger))
   unset %real.name
 }
 
@@ -241,4 +247,26 @@ on 2:Chat:!drop*: {
 }
 
 ON 2:Chat:!use*: {  
+}
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Toggle
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+on 2:Chat:!toggle*: { 
+  ; $2 = flag to toggle on/off
+
+  if ($2 = showhunger) {
+    if ($readini($char($nick), settings, ShowHunger) = true) { 
+      writeini $char($nick) settings ShowHunger false
+      $dcc.private.message($nick, 3The setting: Show Hunger has been set to false) | halt 
+    }
+    if ($readini($char($nick), settings, ShowHunger) = false) { 
+      writeini $char($nick) settings ShowHunger true
+      $dcc.private.message($nick, 3The setting: Show Hunger has been set to true) | halt 
+    }
+  }
+
+  ; More settings can be here.
+
 }
