@@ -1,0 +1,6 @@
+This text file will serve as a source of information as to how the zone files are set up and what options do what.
+
+
+[#:#] - The room number.  The format is [x:y] for default room locations.  For digging/mining, the rooms will be [#:#:-#] or [X:Y:-Z]
+
+

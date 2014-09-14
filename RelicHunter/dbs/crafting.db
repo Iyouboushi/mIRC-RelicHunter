@@ -1,0 +1,18 @@
+==================================
+These are the recipes on how to
+make the various items using
+the combine command.
+===================================
+
+-----------
+Example
+-----------
+[ItemName]
+Ingredients=ingredient1.ingredient2
+SuccessRate=60
+Amount=1
+ingredient1=1
+ingredient2=1
+
+
+

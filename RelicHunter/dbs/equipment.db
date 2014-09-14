@@ -1,0 +1,67 @@
+===================================================================
+This file is just to store the stats and augments of the equipment. 
+Valid EquipLocations are: Head, Body, Legs, Feet, Hands
+====================================================================
+
+========
+HEAD
+========
+
+
+========
+BODY
+========
+
+[PrisonShirt]
+Name=Prison Shirt
+hp=0
+tp=0
+Str=0
+def=0
+int=0
+spd=0
+Augment=none
+EquipLocation=body
+cost=0
+SellPrice=1
+CanDrop=false
+
+
+
+
+========
+LEGS
+========
+
+[PrisonPants]
+Name=Prison Pants
+hp=0
+tp=0
+Str=0
+def=0
+int=0
+spd=0
+Augment=none
+EquipLocation=legs
+cost=0
+SellPrice=1
+CanDrop=false
+
+
+========
+FEET
+========
+
+
+========
+HANDS
+========
+
+
+=============================
+Monster only armor!
+This armor is going to be 
+haxx with augments..so don't
+give it to players
+=============================
+

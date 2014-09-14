@@ -1,0 +1,15 @@
+[Items]
+; Keys are used to open chests. They cannot be bought in stores.  This line needs to stay here for the bot to work.
+Keys=BlueKey.BrownKey.RedKey.OrangeKey.GreenKey.GoldKey.BrownKey.BlueKey.RedKey.SilverKey.PurpleKey.BlackKey
+
+
+=========================
+HEALING ITEMS
+=========================
+[Potion]
+Type=heal
+Target=Single
+Amount=20
+Desc=pulls out a potion bottle and hands it to %enemy $+ , who drinks it down.  Ahh! Refreshing!
+Cost=45
+SellPrice=20

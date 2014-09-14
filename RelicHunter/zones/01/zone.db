@@ -1,0 +1,88 @@
+[info]
+Name=Tutorial
+NumberOfRooms=2
+Active=true
+CanModify=no
+GameDays=1
+
+
+==============================================================
+The weather is controlled in this file for the entire zone.
+==============================================================
+[weather]
+current=calm
+list=calm.gloomy
+boost=.25
+
+==============================================================
+The moon phases are controlled in this file as well.  Please
+do not remove or modify the Moon Phase section as it will cause
+errors.
+==============================================================
+[MoonPhase]
+CurrentMoonPhase=New
+CurrentMoonTurn=1
+
+[MoonPhaseTime]
+full=3
+new=1
+gibbous=5
+quarter=4
+crescent=2
+blood=1
+BloodMoonChance=60
+
+==============================================================
+The "Time of Day" is controlled in this file. Please do not
+remove or modify the time of day section as it will cause
+errors.
+==============================================================
+[TimeOfDay]
+CurrentTimeOfDay=Noon
+CurrentTimeOfDayTurn=1
+
+[TimeOfDayTime]
+morning=2
+noon=2
+evening=2
+night=2
+
+
+==============================================================
+ROOMS go below this line
+==============================================================
+
+[0:0:5]
+Name=The Void
+Desc=You open your eyes and find yourself in a bright white area. A loud voice echos in your mind.  "You are without form. Your first order of business is to choose a race for yourself. North for Human, East for Elf, South for a creature made from Science. Use go to move through the portal of the race you relate to."  You may also use !help racename for more information on the races.
+
+North=writeini $char($nick) location room 0:0:4 | /setrace $nick Human
+East=writeini $char($nick) location room 0:0:4 | /setrace $nick Elf
+South=writeini $char($nick) location room 0:0:4 | /setrace $nick ScienceCreation
+West=
+
+Items=
+
+CanDig=false
+Shop=false
+WarmthNeeded=-100
+UnderWater=false
+Inside=true
+
+
+[0:0:4]
+Name=
+Desc=
+
+
+Items=
+
+CanDig=false
+Shop=false
+WarmthNeeded=-100
+UnderWater=false
+Inside=true
+
+
+
+
