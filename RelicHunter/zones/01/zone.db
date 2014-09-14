@@ -20,7 +20,7 @@ do not remove or modify the Moon Phase section as it will cause
 errors.
 ==============================================================
 [MoonPhase]
-CurrentMoonPhase=New
+CurrentMoonPhase=Crescent
 CurrentMoonTurn=1
 
 [MoonPhaseTime]
@@ -39,7 +39,7 @@ errors.
 ==============================================================
 [TimeOfDay]
 CurrentTimeOfDay=Noon
-CurrentTimeOfDayTurn=1
+CurrentTimeOfDayTurn=2
 
 [TimeOfDayTime]
 morning=2
@@ -54,24 +54,21 @@ ROOMS go below this line
 
 [0:0:5]
 Name=The Void
-Desc=You open your eyes and find yourself in a bright white area. A loud voice echos in your mind.  "You are without form. Your first order of business is to choose a race for yourself. North for Human, East for Elf, South for a creature made from Science. Use go to move through the portal of the race you relate to."  You may also use !help racename for more information on the races.
-
+Desc=You open your eyes and find yourself in a bright white area. A loud voice echos in your mind.  "You are without form. Your first order of business is to choose a race for yourself. North for Human, East for Elf, South for a creature made from Science. Use go to move through the portal of the race you relate to."  You may also use !help racename for more information on the races.
 
 ; Exits
-
+ExitList=North.East.South
 North=0:0:4
 East=0:0:4
 South=0:0:4
 
 ; Exit Actions
-
-NorthAction=/setrace $nick Human
-EastAction=/setrace $nick Elf
-SouthAction=/setrace $nick ScienceCreation
+NorthAction=/.echo -q $setrace($nick,Human)
+EastAction=/.echo -q $setrace($nick,Elf)
+SouthAction=/.echo -q $setrace($nick,ScienceCreation)
 WestAction=
 
 ; Room Items
-
 Items=
 
 ; Room Flags
@@ -83,12 +80,18 @@ Inside=true
 
 
 [0:0:4]
-Name=
-Desc=
+Name=The Void
+Desc=You've reached the end of the game as of 91414! Yay!
 
+; Exits
+ExitList=
 
+; Exit Actions
+
+; Room Items
 Items=
 
+; Room Flags
 CanDig=false
 Shop=false
 WarmthNeeded=-100
