@@ -1,0 +1,17 @@
+Objects are things that are in the various rooms that players can interact with.  This file is where you store what happens when you do certain actions with an object.
+
+[ExampleObject]
+Name=
+Desc=
+
+;Actions
+Push=
+Pull=
+Open=
+Close=
+Kick=
+Punch=
+
+; Flags
+IsOpen=false
+IsClosed=true

@@ -1,0 +1,15 @@
+
+
+[NpcName]
+Name=
+hp=
+str=
+def=
+int=
+agi=
+char=
+techs=
+weapon=
+levelmin=
+levelmax=
+Talk=$read(npcname.txt)

@@ -4,6 +4,7 @@ Str=0
 Def=0
 Int=0
 Agi=0
+Char=0
 Name=
 
 
@@ -14,8 +15,10 @@ Str=0
 Def=0
 Int=0
 Agi=0
+Char=0
 Hunger=100
 Warmth=1
+Stamina=50
 Status=alive
 InBattle=false
 
@@ -46,8 +49,9 @@ RevivedTimes=0
 
 [Info]
 Race=unknown
-Gender=his
-Gender2=him
+Class=unknown
+Gender=unknown
+Gender2=unknown
 password=+8F%T=&QE87)E;F$`
 passhurt=0
 LastSeen=N/a
@@ -97,22 +101,20 @@ Equipped=Fists
 Fists=1
 
 [Items]
-Count=2
-PrisonShirt=1
-PrisonPants=1
+Count=0
 
 [Skills]
 
 
 [Techniques]
-DoublePunch=1
+
 
 
 [equipment]
 accessory=none
 Head=none
-Body=PrisonShirt
-Legs=PrisonPants
+Body=none
+Legs=none
 Feet=none
 Hands=none
 
@@ -120,3 +122,12 @@ Hands=none
 Version=1.0
 
 [Battle]
+
+
+[Settings]
+ShowHunger=true
+
+
+[Flags]
+TutorialComplete=false
+FreeStartingItems=false

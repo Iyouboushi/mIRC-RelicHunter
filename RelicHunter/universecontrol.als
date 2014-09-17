@@ -119,7 +119,7 @@ timeofday.increase {
 }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Gives HP back and 
+; Gives HP&STAM back and 
 ; lowers hunger.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 game.tick {
@@ -128,7 +128,7 @@ game.tick {
   var %chat.gametick 1
   while ($chat(%chat.gametick) != $null) {  var %gametick.nick $chat(%chat.gametick) 
 
-    ; If the person is not in battle, give back some HP
+    ; If the person is not in battle, give back some HP and stamina
 
     if ($in.battle(%gametick.nick) = false) { 
 
@@ -140,6 +140,12 @@ game.tick {
         if (%current.hp > $base.hp(%gametick.nick)) { var %current.hp $base.hp(%gametick.nick) }
         writeini $char(%gametick.nick) currentstats hp %current.hp 
       }
+
+
+      var %current.stamina $current.stamina(%gametick.nick)
+      inc %current.stamina 2
+      if (%current.stamina > 50) { var %current.stamina 50 }
+      writeini $char(%gametick.nick) currentstats stamina %current.stamina
 
       ; lower hunger by 10
       var %current.hunger $current.hunger(%gametick.nick)

@@ -10,7 +10,7 @@ GameDays=1
 The weather is controlled in this file for the entire zone.
 ==============================================================
 [weather]
-current=calm
+current=gloomy
 list=calm.gloomy
 boost=.25
 
@@ -20,7 +20,7 @@ do not remove or modify the Moon Phase section as it will cause
 errors.
 ==============================================================
 [MoonPhase]
-CurrentMoonPhase=Crescent
+CurrentMoonPhase=New
 CurrentMoonTurn=1
 
 [MoonPhaseTime]
@@ -30,7 +30,7 @@ gibbous=5
 quarter=4
 crescent=2
 blood=1
-BloodMoonChance=60
+BloodMoonChance=10
 
 ==============================================================
 The "Time of Day" is controlled in this file. Please do not
@@ -38,8 +38,8 @@ remove or modify the time of day section as it will cause
 errors.
 ==============================================================
 [TimeOfDay]
-CurrentTimeOfDay=Noon
-CurrentTimeOfDayTurn=2
+CurrentTimeOfDay=Evening
+CurrentTimeOfDayTurn=1
 
 [TimeOfDayTime]
 morning=2
@@ -54,22 +54,20 @@ ROOMS go below this line
 
 [0:0:5]
 Name=The Void
-Desc=You open your eyes and find yourself in a bright white area. A loud voice echos in your mind.  "You are without form. Your first order of business is to choose a race for yourself. North for Human, East for Elf, South for a creature made from Science. Use go to move through the portal of the race you relate to."  You may also use !help racename for more information on the races.
+Desc=You open your eyes and find yourself in a bright white area. A loud voice echos in your mind.  "You are without form. Your first order of business is to choose a race that you identify with. Use go race (such as go human).  Valid races are: Human, Elf, CreatureOfScience"  You may also use !help racename for more information on the races.
+BattleChance=0
 
 ; Exits
-ExitList=North.East.South
-North=0:0:4
-East=0:0:4
-South=0:0:4
+ExitList=Human.Elf.CreatureOfScience
+Human=0:0:4
+Elf=0:0:4
+CreatureOfScience=0:0:4
 
 ; Exit Actions
-NorthAction=/.echo -q $setrace($nick,Human)
-EastAction=/.echo -q $setrace($nick,Elf)
-SouthAction=/.echo -q $setrace($nick,ScienceCreation)
-WestAction=
+HumanAction=/.echo -q $setrace($1,Human)
+ElfAction=/.echo -q $setrace($1,Elf)
+CreatureOfScienceAction=/.echo -q $setrace($1,ScienceCreation)
 
-; Room Items
-Items=
 
 ; Room Flags
 CanDig=false
@@ -77,19 +75,29 @@ Shop=false
 WarmthNeeded=-100
 UnderWater=false
 Inside=true
+zone=void
+trees=0
+CanDig=false
+
+; Room Items
+Items=
 
 
 [0:0:4]
 Name=The Void
-Desc=You've reached the end of the game as of 91414! Yay!
+Desc="Very good $get.name($1) the $race($1) $+ .  Now you must choose a gender for yourself. Valid genders are male, female, or other"
+BattleChance=0
 
 ; Exits
-ExitList=
+ExitList=male.female.other
+Male=0:0:3
+Female=0:0:3
+Other=0:0:3
 
 ; Exit Actions
-
-; Room Items
-Items=
+MaleAction=/.echo -q $setgender($1, male)
+FemaleAction=/.echo -q $setgender($1, female)
+OtherAction=/.echo -q $setgender($1, other)
 
 ; Room Flags
 CanDig=false
@@ -97,7 +105,37 @@ Shop=false
 WarmthNeeded=-100
 UnderWater=false
 Inside=true
+zone=void
+trees=0
+CanDig=false
+
+; Room Items
+Items=
 
 
 
 
+[0:0:3]
+Name=The Void
+Desc=You have reached the end of the game as of 091614
+BattleChance=0
+
+; Exits
+ExitList=
+
+
+; Exit Actions
+
+
+; Room Flags
+CanDig=false
+Shop=false
+WarmthNeeded=-100
+UnderWater=false
+Inside=true
+zone=void
+trees=0
+CanDig=false
+
+; Room Items
+Items=

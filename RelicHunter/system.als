@@ -1,4 +1,4 @@
-game.version { return 1.0beta_091414 } 
+game.version { return 1.0beta_091614 } 
 system.dat.version { return 091314 }
 quitmsg { return Relic Hunter Bot version $game.version written by James  "Iyouboushi" }
 system_defaults_check {
@@ -73,6 +73,8 @@ boss_path { return " $+ $mircdir $+ %boss_folder $+ " }
 npc_path { return " $+ $mircdir $+ %npc_folder $+ " }
 zap_path { return " $+ $mircdir $+ %player_folder $+ %zapped_folder $+ " }
 zone_path { return " $+ $mircdir $+ %zones_folder $+ " }
+zonemon { return " $+ $mircdir $+ %zones_folder $+ $1 $+ \monsters.db" }
+zonenpc { return " $+ $mircdir $+ %zones_folder $+ $1 $+ \npcs.db" }
 get.room {  return $readini($char($1), Location, Room) }
 get.zone {  return $readini($char($1), Location, Zone) }
 get.zone.and.room {  return $readini($char($1), Location, Zone) $+ : $+ $readini($char($1), Location, Room) }
@@ -284,14 +286,68 @@ display.battle.message {
 }
 
 
+announce.room.action {
+
+  if ($2 = departroom) {
+    ; $1 = person moving
+    ; $3 = direction person took
+
+    var %user.location $get.zone.and.room($1)
+    var %chat.move 1
+    while ($chat(%chat.move) != $null) {  var %move.nick $chat(%chat.move) 
+      if (%move.nick != $1) {
+        var %target.location $get.zone.and.room(%move.nick)
+        if (%target.location = %user.location) { $dcc.private.message(%move.nick, $readini(translation.dat, system, movedtonewroom)) }
+      }
+      inc %chat.move 1
+    } 
+  }
+
+
+  if ($2 = arriveroom) {
+    ; $1 = person moving
+
+    var %user.location $get.zone.and.room($1)
+    var %chat.arrive 1
+    while ($chat(%chat.arrive) != $null) {  var %move.nick $chat(%chat.arrive) 
+      if (%move.nick != $1) {
+        var %target.location $get.zone.and.room(%move.nick)
+        if (%target.location = %user.location) { $dcc.private.message(%move.nick, $readini(translation.dat, system, ArrivedToRoom)) }
+      }
+      inc %chat.arrive 1
+    } 
+  }
+
+
+  if ($2 = pushobject) { }
+  if ($2 = pullobject) { }
+  if ($2 = takeitem) { }
+
+
+  if ($2 = dropitem) { 
+    ; $1 = person dropping the item
+    ; $3 = the item dropped
+
+    var %user.location $get.zone.and.room($1)
+    var %chat.drop 1
+    while ($chat(%chat.drop) != $null) {  var %drop.nick $chat(%chat.drop) 
+      if (%drop.nick != asdfasdf) {
+        var %target.location $get.zone.and.room(%drop.nick)
+        if (%target.location = %user.location) { $dcc.private.message(%drop.nick, $readini(translation.dat, system, droppedItem)) }
+      }
+      inc %chat.drop 1
+    } 
+
+  }
+
+}
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;Below this is all old BA stuff
 ;needs to be changed/edited/removed
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-
 
 total.player.deaths {
   var %player.deaths 0 

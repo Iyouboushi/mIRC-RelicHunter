@@ -12,16 +12,18 @@ on 2:open:=: {
   $set_chr_name($nick)
 
   while ($chat(%p) != $null) { 
-
-    ; Build the character description (to be added)
-    ; msg = $+ $chat(%p) 10 $+ %real.name  $+  $readini($char($nick), Descriptions, Char) 
-
     if ($chat(%p) == $nick) { inc %p 1 }
     else {  msg = $+ $chat(%p) 14###4 $nick has entered the universe on planet %where $+ . | inc %p 1 }
   }
 
   $dcc.who'sonline($nick)
-  $look.room($nick)
+
+
+  if ($readini($char($nick), currentStats, InBattle) = false) { $look.room($nick) }
+  else { 
+    ; Resume battle
+  }
+
 }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

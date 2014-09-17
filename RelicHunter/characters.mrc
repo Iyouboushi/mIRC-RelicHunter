@@ -106,17 +106,6 @@ on 2:Chat:!view-info*: { $view-info($1, $2, $3, $4) }
 on 2:Chat:!help*: { $gamehelp($2, $nick) }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Set Gender
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-ON 2:Chat:!setgender *: { $checkscript($2-)
-  if ($2 = neither) { writeini $char($nick) Info Gender its | writeini $char($nick) Info Gender2 its | $dcc.private.message($nick, $readini(translation.dat, system, SetGenderNeither)) | unset %check | halt }
-  if ($2 = none) { writeini $char($nick) Info Gender its | writeini $char($nick) Info Gender2 its | $dcc.private.message($nick, $readini(translation.dat, system, SetGenderNeither))  | unset %check | halt }
-  if ($2 = male) { writeini $char($nick) Info Gender his | writeini $char($nick) Info Gender2 him | $dcc.private.message($nick, $readini(translation.dat, system, SetGenderMale))  | unset %check | halt }
-  if ($2 = female) { writeini $char($nick) Info Gender her | writeini $char($nick) Info Gender2 her | $dcc.private.message($nick, $readini(translation.dat, system, SetGenderFemale)) | unset %check | halt }
-  else { $dcc.private.message($nick, $readini(translation.dat, errors, NeedValidGender)) | unset %check | halt }
-}
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; See stats
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 on 2:Chat:!hp*: { 
@@ -165,7 +154,7 @@ on 2:Chat:!skills*: {
 
 on 2:Chat:!race: { $dcc.private.message($nick, $readini(translation.dat, system, showrace))  }
 on 2:Chat:!gender: { $dcc.private.message($nick, $readini(translation.dat, system, showgender))  }
-
+on 2:Chat:!class: { $dcc.private.message($nick, $readini(translation.dat, system, showclass))  }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Equipment Commands
@@ -244,6 +233,7 @@ on 2:Chat:!accessories*: { $inventory($nick, accessories) }
 
 on 2:Chat:!drop*: {  
   ; Attempt to drop an item from inventory to the room.
+  $room.dropitem($nick, $2)
 }
 
 ON 2:Chat:!use*: {  

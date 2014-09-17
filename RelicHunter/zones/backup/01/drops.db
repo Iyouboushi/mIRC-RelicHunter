@@ -1,0 +1,11 @@
+; This file contains the drop pools for monsters and bosses.  Feel free to edit them here.
+
+
+[drops]
+
+; Bosses
+Name=drops.drops.drops
+
+
+; Monsters
+CaveBat=

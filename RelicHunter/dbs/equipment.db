@@ -24,9 +24,8 @@ Augment=none
 EquipLocation=body
 cost=0
 SellPrice=1
-CanDrop=false
-
-
+exclusive=true
+Type=Armor
 
 
 ========
@@ -45,7 +44,8 @@ Augment=none
 EquipLocation=legs
 cost=0
 SellPrice=1
-CanDrop=false
+exclusive=true
+Type=Armor
 
 
 ========

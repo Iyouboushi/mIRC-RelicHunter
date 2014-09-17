@@ -195,10 +195,14 @@ AccessCommandAdd=$chr(3) $+ 3 $+ Your character can be now be controlled by $
 GainedJobPoint=$chr(3) $+ 7 $+ You have gained 1 job point bringing your new total to %current.jobpoints $+ .
 Starving=$chr(3) $+ 4 $+ You are currently starving and will not regenerate HP naturally.  Find some food!
 ShowRace=$chr(3) $+ 3 $+ You are $race($nick) 
-ShowGender=$chr(3) $+ 3 $+ You are $iif($gender($nick) = his, male, $iif($gender($nick) = her, female, other gender)) 
+ShowGender=$chr(3) $+ 3 $+ You are $get.gender($nick)
+ShowClass=$chr(3) $+ 3 $+ You are a level $get.level($nicK) $class($nick) 
 CurrentPOS=$chr(3) $+ 7 $+ Your current Galactic POS is:  $get.zone.and.room($nick)
-MovedToNewRoom=$chr(3) $+ 3 $+ $readini($char($1), basestats, name) has gone $2
+MovedToNewRoom=$chr(3) $+ 3 $+ $readini($char($1), basestats, name) has gone $3
 ArrivedToRoom=$chr(3) $+ 3 $+ $readini($char($1), basestats, name) has arrived here.
+DroppedItem=$chr(3) $+ 2 $+ $get.name($1) has dropped 1 $3 here.
+LearnedNewSkill=$chr(3) $+ 7 $+ * You have learned the $2 skill at level %skill.level.adding
+IncreasedSkill=$chr(3) $+ 7 $+ * Your $2 skill has increased by + $+ %skill.level.increase bringing it to level %current.skill.knowledge
 
 =======================
 Health Titles
