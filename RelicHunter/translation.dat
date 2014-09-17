@@ -34,32 +34,42 @@ StartingCharPassword=$chr(3) $+ 2 $+ Your password has been set to %password a
 UnZappedComplete=$chr(3) $+ 10 $+ $+ %real.name has been restored to this dimension. 
 ZappedComplete=$chr(3) $+ 10 $+ $+ %real.name has been erased from this dimension. 
 NewPassword=$chr(3) $+ 3 $+ Your new password has been set to $3 
-SetGenderNeither=$chr(3) $+ 3 $+ Your gender has been set to its 
-SetGenderMale=$chr(3) $+ 3 $+ Your gender has been set to $2
-SetGenderFemale=$chr(3) $+ 3 $+ Your gender has been set to $2
 ViewMyHP=$chr(3) $+ 3 $+ Your HP is: $readini($char($nick), CurrentStats, HP) $chr(47) $readini($char($nick), BaseStats, HP)  $+ $chr(91) $+ %hstats $+ 3 $+ $chr(93) 
 ViewMyHunger=$chr(3) $+ 3 $+ Your Hunger is at: $readini($char($nick), CurrentStats, Hunger) $chr(47) 100
-ViewMyMechHP=$chr(3) $+ 3 $+  $+ %real.name $+ 's %mech.name HP is: $readini($char($nick), Mech, HpCurrent) $chr(47) $readini($char($nick), Mech, HpMax)  $+ $chr(91) $+ %hstats $+ 3 $+ $chr(93) 
-ViewMyTP=$chr(3) $+ 3 $+  $+ %real.name $+ 's TP is: $readini($char($nick), CurrentStats, TP) $chr(47) $readini($char($nick), BaseStats, TP) 
-ViewMyIG=$chr(3) $+ 3 $+  $+ %real.name $+ 's Ignition Gauge is: $readini($char($nick), CurrentStats, IgnitionGauge) $chr(47) $readini($char($nick), BaseStats, IgnitionGauge) 
-ViewAlliedNotes=$chr(3) $+ 3 $+  $+ %real.name has $bytes(%allied.notes,b) allied notes.
-ViewDoubleDollars=$chr(3) $+ 3 $+  $+ %real.name has %currency.symbol $+ $bytes(%doubledollars,b) double dollars.
-ViewLevel=$chr(3) $+ 3 $+  $+ %real.name is roughly level %player.level
-ViewMyOrbs=$chr(3) $+ 3 $+  $+ %real.name has $bytes($readini($char($nick), stuff, RedOrbs),b)  $+ $readini(system.dat, system, currency) and $bytes($readini($char($nick), stuff, BlackOrbs),b)  $+ $iif($readini($char($nick), stuff, BlackOrbs) < 2, Black Orb, Black Orbs) and has spent %orbs.spent  $+ $readini(system.dat, system, currency) and %blackorbs.spent  $+ $iif($readini($char($nick), stuff, BlackOrbs) < 2, Black Orb, Black Orbs) total! 
-ViewOthersOrbs=$chr(3) $+ 3 $+  $+ %real.name has $bytes($readini($char($2), stuff, RedOrbs),b)  $+ $readini(system.dat, system, currency) and $bytes($readini($char($2), stuff, BlackOrbs),b)  $+ $iif($readini($char($2), stuff, BlackOrbs) < 2, Black Orb, Black Orbs) and has spent %orbs.spent  $+ $readini(system.dat, system, currency) and %blackorbs.spent  $+ $iif($readini($char($2), stuff, BlackOrbs) < 2, Black Orb, Black Orbs) total! 
-OrbsLeft=$chr(3) $+ 3 $+ You have $bytes($readini($char($nick), stuff, RedOrbs),b)  $+ $readini(system.dat, system, currency) left
-BlackOrbsLeft=$chr(3) $+ 3 $+ You have $bytes($readini($char($nick), stuff, BlackOrbs),b)  $+ black $iif($bytes($readini($char($nick), stuff, BlackOrbs),b) = 1, orb, orbs) left
-HereIsYourCurrentStats=$chr(3) $+ 3 $+ Here are your current stats:
-HereIsOtherCurrentStats=$chr(3) $+ 3 $+ Here are the current stats for $2 $+ :
-HereIsMiscInfo=$chr(3) $+ 3 $+ Here is %misc.target misc statistical info:
-CurrentWeaponEquipped=Current $iif(%weapon.equipped.left != $null, Weapons, Weapon) Equipped
+ViewMyStamina=$chr(3) $+ 3 $+ Your Stamina is at: $readini($char($nick), CurrentStats, Stamina) $chr(47) 50
+Starving=$chr(3) $+ 4 $+ You are currently starving and will not regenerate HP naturally.  Find some food!
+ShowRace=$chr(3) $+ 3 $+ You are $race($nick) 
+ShowGender=$chr(3) $+ 3 $+ You are $get.gender($nick)
+ShowClass=$chr(3) $+ 3 $+ You are a level $get.level($nicK) $class($nick) 
+CurrentPOS=$chr(3) $+ 7 $+ Your current Galactic POS is:  $get.zone.and.room($nick)
+MovedToNewRoom=$chr(3) $+ 3 $+ $readini($char($1), basestats, name) has gone $3
+ArrivedToRoom=$chr(3) $+ 3 $+ $readini($char($1), basestats, name) has arrived here.
+DroppedItem=$chr(3) $+ 2 $+ $get.name($1) has dropped 1 $3 here.
+TookItem=$chr(3) $+ 2 $+ $get.name($1) has picked up 1 $3 from here.
+YouDropItem=$chr(3) $+ 2 $+ You have dropped 1 $2 here.
+YouTakeItem=$chr(3) $+ 2 $+ You have picked up 1 $2 from here.
+LearnedNewSkill=$chr(3) $+ 7 $+ * You have learned the $2 skill at level %skill.level.adding
+IncreasedSkill=$chr(3) $+ 7 $+ * Your $2 skill has increased by + $+ %skill.level.increase bringing it to level %current.skill.knowledge
+ViewLevel=$chr(3) $+ 3 $+  $+ $get.name($1) is level %player.level
 CurrentAccessoryEquipped=Current Accessory
 CurrentArmorHeadEquipped=Current Head Armor
 CurrentArmorBodyEquipped=Current Body Armor
 CurrentArmorLegsEquipped=Current Leg Armor
 CurrentArmorFeetEquipped=Current Feet Armor
 CurrentArmorHandsEquipped=Current Hand Armor
-ViewWeaponList=$chr(3) $+ 3 $+  $+ %real.name has the following weapons: %weapon.list1
+ViewWeaponList=$chr(3) $+ 3 $+  $+ %real.name 
+DiggingAction=$chr(3) $+ 3 $+  $+ $get.name($1) begins digging %direction $+ !
+YouDigDirection=$chr(3) $+ 3 $+ You begin to dig %direction $+ !
+
+ViewMyMechHP=$chr(3) $+ 3 $+  $+ %real.name $+ 's %mech.name HP is: $readini($char($nick), Mech, HpCurrent) $chr(47) $readini($char($nick), Mech, HpMax)  $+ $chr(91) $+ %hstats $+ 3 $+ $chr(93) 
+ViewMyTP=$chr(3) $+ 3 $+  $+ %real.name $+ 's TP is: $readini($char($nick), CurrentStats, TP) $chr(47) $readini($char($nick), BaseStats, TP) 
+ViewMyIG=$chr(3) $+ 3 $+  $+ %real.name $+ 's Ignition Gauge is: $readini($char($nick), CurrentStats, IgnitionGauge) $chr(47) $readini($char($nick), BaseStats, IgnitionGauge) 
+ViewAlliedNotes=$chr(3) $+ 3 $+  $+ %real.name has $bytes(%allied.notes,b) allied notes.
+HereIsYourCurrentStats=$chr(3) $+ 3 $+ Here are your current stats:
+HereIsOtherCurrentStats=$chr(3) $+ 3 $+ Here are the current stats for $2 $+ :
+HereIsMiscInfo=$chr(3) $+ 3 $+ Here is %misc.target misc statistical info:
+CurrentWeaponEquipped=Current $iif(%weapon.equipped.left != $null, Weapons, Weapon) Equipped
+has the following weapons: %weapon.list1
 ViewShieldList=$chr(3) $+ 3 $+  $+ %real.name has $iif(%shield.list1 = $null, no shields, the following shields: %shield.list1 )
 ViewCurrentStyle=$chr(3) $+ 3 $+  $+ %real.name is currently using the %current.playerstyle style. [XP: %current.playerstyle.xp $chr(47) %current.playerstyle.xptolevel $+ ] 
 ViewCurrentStyleMaxed=$chr(3) $+ 3 $+  $+ %real.name is currently using the %current.playerstyle style. [Currently Maxed] 
@@ -189,20 +199,9 @@ MechUpgradeHealth=$chr(3) $+ 2 $+ You pay a crazy engineer %total.price Allied 
 MechUpgradeEngine=$chr(3) $+ 2 $+ You pay a crazy engineer %total.price Allied Notes to upgrade your mech's engine. When completed, your mech now has + $+ %engine.to.increase more engine efficiency.
 CountItem=$chr(3) $+ 3 $+ %real.name has %player.count.amount  $+ $2 $+ $iif(%player.count.amount  > 1, s) 
 TechIncrease=$chr(3) $+ 3 $+ Your proficiency with $2 has increased! You have gained +1 to your technique. It is now level $readini($char($1), techniques, $2)
-AccessCommandList=$chr(3) $+ 3 $+ Your character can be controlled by: %player.access.list
-AccessCommandRemove=$chr(3) $+ 3 $+ Your character can be no longer be controlled by $3
-AccessCommandAdd=$chr(3) $+ 3 $+ Your character can be now be controlled by $3
 GainedJobPoint=$chr(3) $+ 7 $+ You have gained 1 job point bringing your new total to %current.jobpoints $+ .
-Starving=$chr(3) $+ 4 $+ You are currently starving and will not regenerate HP naturally.  Find some food!
-ShowRace=$chr(3) $+ 3 $+ You are $race($nick) 
-ShowGender=$chr(3) $+ 3 $+ You are $get.gender($nick)
-ShowClass=$chr(3) $+ 3 $+ You are a level $get.level($nicK) $class($nick) 
-CurrentPOS=$chr(3) $+ 7 $+ Your current Galactic POS is:  $get.zone.and.room($nick)
-MovedToNewRoom=$chr(3) $+ 3 $+ $readini($char($1), basestats, name) has gone $3
-ArrivedToRoom=$chr(3) $+ 3 $+ $readini($char($1), basestats, name) has arrived here.
-DroppedItem=$chr(3) $+ 2 $+ $get.name($1) has dropped 1 $3 here.
-LearnedNewSkill=$chr(3) $+ 7 $+ * You have learned the $2 skill at level %skill.level.adding
-IncreasedSkill=$chr(3) $+ 7 $+ * Your $2 skill has increased by + $+ %skill.level.increase bringing it to level %current.skill.knowledge
+
+
 
 =======================
 Health Titles
@@ -261,6 +260,18 @@ Can'tSeeWeather=$chr(3) $+ 4 $+ You're unable to see the current weather from th
 Can'tSeeMoon=$chr(3) $+ 4 $+ You're unable to see the current moon from this location.
 Can'tSeeTimeOfDay=$chr(3) $+ 4 $+ You're unable to see the current time of day from this location.
 NotValidExit=$chr(3) $+ 4 $+ You're unable to go in that direction from here.
+InventoryIsFull=$chr(3) $+ 4 $+ Your inventory is full.
+RoomDoesn'tHaveItem=$chr(3) $+ 4 $+ You do not see that item here in this room.
+DoNotHaveThatItem=$chr(3) $+ 4 $+ You do not have that item.
+ItemDoesNotExist=$chr(3) $+ 4 $+ SYSTEM ERROR: this item does not exist in the items.db. Please have the bot admin add it.
+ItemIsExclusive=$chr(3) $+ 4 $+ This item cannot be dropped or traded.
+RoomIsFull=$chr(3) $+ 4 $+ You are unable to drop any more items into this room.
+CannotDigDirection=$chr(3) $+ 4 $+ You are unable to dig in that direction.
+DoNotHavePickaxe=$chr(3) $+ 4 $+ You do not have a pickaxe.
+DoNotHaveStamina=$chr(3) $+ 4 $+ You do not have enough stamina to do this.
+CannotDigHere=$chr(3) $+ 4 $+ You cannot dig here.
+
+
 Can'tDualWield=$chr(3) $+ 4 $+ Error: %real.name does not have the necessary skill to dual wield.
 WeaponAlreadyEquipped=$chr(3) $+ 4 $+ Error: %real.name is already using that weapon.
 Using2HWeapon=$chr(3) $+ 4 $+ Error: Your current weapon is currently a 2 handed weapon.
@@ -320,7 +331,6 @@ CannotProvokePlayers=$chr(3) $+ 4 $+ Error: $set_chr_name($1) cannot provoke p
 CannotUseItemOnDead=$chr(3) $+ 4 $+ Error: This item cannot be used on someone who's dead.
 CannotWeaponLockPlayers=$chr(3) $+ 4 $+ Error: $set_chr_name($1) cannot weapon lock players or npcs. 
 CannotDisarmPlayers=$chr(3) $+ 4 $+ Error: $set_chr_name($1) cannot disarm players or npcs. 
-DoesNotHaveThatItem=$chr(3) $+ 4 $+ Error: %real.name does not have that item.
 DoesNotHaveEnoughHammers=$chr(3) $+ 4 $+ Error: %real.name does not have enough repair hammers!
 ItemIsUsedInSkill=$chr(3) $+ 4 $+ Error: This item is used via performing a skill. 
 ItemIsAccessoryEquipItInstead=$chr(3) $+ 4 $+ Error: This item is an accessory and cannot be used like this. Use !wear to equip it.

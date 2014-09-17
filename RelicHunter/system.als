@@ -78,6 +78,9 @@ zonenpc { return " $+ $mircdir $+ %zones_folder $+ $1 $+ \npcs.db" }
 get.room {  return $readini($char($1), Location, Room) }
 get.zone {  return $readini($char($1), Location, Zone) }
 get.zone.and.room {  return $readini($char($1), Location, Zone) $+ : $+ $readini($char($1), Location, Room) }
+get.x { return $gettok( $get.room($1) ,1,58) }
+get.y { return $gettok( $get.room($1) ,2,58) }
+get.z { return $gettok( $get.room($1) ,3,58) }
 password { set %password $readini($char($1), n, Info, Password) }
 passhurt { set %passhurt $readini($char($1), Info, Passhurt) | return }
 userlevel { set %userlevel $readini($char($1), Info, user) | return }
@@ -278,11 +281,11 @@ display.private.message.delay.custom {
 
 }
 
-; This particular display alias is actually defunct, but leaving it in just in case I missed something.
-display.battle.message {
-  ; $1 = the message
-  if (($readini(system.dat, system, botType) = IRC) || ($readini(system.dat, system, botType) = TWITCH)) {  query %battlechan $1  }
-  if ($readini(system.dat, system, botType) = DCCchat) {  $dcc.battle.message($1)   }
+; Returns the room flag.
+room.flag { 
+  var %room.flag $readini($zone($1), $2, $3)
+  if (%room.flag = $null) { return false }
+  else { return %room.flag }
 }
 
 
@@ -321,7 +324,38 @@ announce.room.action {
 
   if ($2 = pushobject) { }
   if ($2 = pullobject) { }
-  if ($2 = takeitem) { }
+
+  if ($2 = digging) { 
+    ; $1 = person digging
+    ; $3 = the direction
+
+    var %user.location $get.zone.and.room($1)
+    var %chat.dig 1
+    while ($chat(%chat.dig) != $null) {  var %dig.nick $chat(%chat.dig) 
+      if (%dig.nick != $1) {
+        var %target.location $get.zone.and.room(%dig.nick)
+        if (%target.location = %user.location) { $dcc.private.message(%dig.nick, $readini(translation.dat, system, diggingAction)) }
+      }
+      inc %chat.dig 1
+    } 
+
+  }
+
+
+  if ($2 = takeitem) {
+    ; $1 = person dropping the item
+    ; $3 = the item dropped
+
+    var %user.location $get.zone.and.room($1)
+    var %chat.take 1
+    while ($chat(%chat.take) != $null) {  var %take.nick $chat(%chat.take) 
+      if (%take.nick != $1) {
+        var %target.location $get.zone.and.room(%take.nick)
+        if (%target.location = %user.location) { $dcc.private.message(%take.nick, $readini(translation.dat, system, tookItem)) }
+      }
+      inc %chat.take 1
+    } 
+  }
 
 
   if ($2 = dropitem) { 
@@ -331,23 +365,16 @@ announce.room.action {
     var %user.location $get.zone.and.room($1)
     var %chat.drop 1
     while ($chat(%chat.drop) != $null) {  var %drop.nick $chat(%chat.drop) 
-      if (%drop.nick != asdfasdf) {
+      if (%drop.nick != $1) {
         var %target.location $get.zone.and.room(%drop.nick)
         if (%target.location = %user.location) { $dcc.private.message(%drop.nick, $readini(translation.dat, system, droppedItem)) }
       }
       inc %chat.drop 1
     } 
-
   }
 
+
 }
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;Below this is all old BA stuff
-;needs to be changed/edited/removed
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 total.player.deaths {
   var %player.deaths 0 
@@ -372,7 +399,6 @@ total.player.deaths {
   return %player.deaths
 }
 
-
 total.player.battles {
   var %player.totalbattles 0 
 
@@ -394,7 +420,22 @@ total.player.battles {
   return %player.totalbattles
 }
 
+status_message_check { 
+  if (%all_status = $null) { %all_status = 4 $+ $1- | return }
+  else { %all_status = 4 $+ %all_status $+ $chr(0160) $+ 3 $+ $chr(124) $+ 4 $+ $chr(0160) $+ $1- | return }
+}
+skills_message_check { 
+  if (%all_skills = $null) { %all_skills = 4 $+ $1- | return }
+  else { %all_skills = 4 $+ %all_skills $+ $chr(0160) $+ 3 $+ $chr(124) $+ 4 $+ $chr(0160) $+ $1- | return }
+}
 
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;Below this is all old BA stuff
+;needs to be changed/edited/removed
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 get.unspentpoints {
   ; $1 = monster
@@ -423,12 +464,6 @@ get.unspentpoints {
     if ($isfile($summon($4)) = $true) {   var %points.should.have.spent $round($calc(19 * $2),0) }
 
     if (((($isfile($boss($1)) = $false) && ($isfile($mon($1)) = $false) && ($isfile($npc($1)) = $false) && ($isfile($summon($1)) = $false)))) { var %points.per.level 20 | var %points.should.have.spent $round($calc(%points.per.level * $2),0) }
-
-    if ($3 = doppelganger) { var %points.should.have.spent $round($calc(20 * $2),0) }
-    if ($3 = demonwall) { var %points.should.have.spent $round($calc(20 * $2),0) }
-    if ($3 = warmachine) { var %points.should.have.spent $round($calc(20 * $2),0) }
-    if ($3 = rage) { var %points.should.have.spent $round($calc(1000 * $2),0) }
-
     if (%bloodmoon = on) { inc %points.should.have.spent $calc(20 * $rand(5,10)) }
 
   }
@@ -523,14 +558,7 @@ player.skills.list {
   unset %cover.target
 }
 
-status_message_check { 
-  if (%all_status = $null) { %all_status = 4 $+ $1- | return }
-  else { %all_status = 4 $+ %all_status $+ $chr(0160) $+ 3 $+ $chr(124) $+ 4 $+ $chr(0160) $+ $1- | return }
-}
-skills_message_check { 
-  if (%all_skills = $null) { %all_skills = 4 $+ $1- | return }
-  else { %all_skills = 4 $+ %all_skills $+ $chr(0160) $+ 3 $+ $chr(124) $+ 4 $+ $chr(0160) $+ $1- | return }
-}
+
 
 
 

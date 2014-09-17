@@ -33,7 +33,3 @@ go {
   $announce.room.action($1, arriveroom)
 
 }
-
-show.room.arrive {
-
-}

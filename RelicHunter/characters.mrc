@@ -131,6 +131,18 @@ on 2:Chat:!hunger*: {
   unset %real.name
 }
 
+on 2:Chat:!stamina*: { 
+  $set_chr_name($nick) 
+  $dcc.private.message($nick,$readini(translation.dat, system, ViewMyStamina))
+  unset %real.name
+}
+
+on 2:Chat:!stam*: { 
+  $set_chr_name($nick) 
+  $dcc.private.message($nick,$readini(translation.dat, system, ViewMyStamina))
+  unset %real.name
+}
+
 on 2:Chat:!level*: {
   if ($1 = !leveladjust) { halt }
   if ($2 = $null) { $set_chr_name($nick) | var %player.level $bytes($round($get.level($nick),0),b) | $dcc.private.message($nick, $readini(translation.dat, system, ViewLevel)) | unset %real.name }
@@ -186,6 +198,20 @@ on 2:Chat:down: { $go($nick, down) }
 on 2:Chat:up: { $go($nick,up }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Digging Command
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+on 2:Chat:!dig *: { 
+  var %valid.directions n.north.e.east.s.south.w.west.u.up.d.down
+  if ($istok(%valid.directions, $2, 46) = $true) { $dig($nick, $2) }
+  else { $dcc.private.message($readini(translation.dat), errors, CannotDigDirection)) }
+}
+on 2:Chat:dig *: { 
+  var %valid.directions n.north.e.east.s.south.w.west.u.up.d.down
+  if ($istok(%valid.directions, $2, 46) = $true) { $dig($nick, $2) }
+  else { $dcc.private.message($readini(translation.dat), errors, CannotDigDirection)) }
+}
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Looking/room commands
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 on 2:Chat:!weather*: {  
@@ -218,9 +244,29 @@ on 2:Chat:!look at*: {
 
 }
 
-
 on 2:Chat:!take*: {  
   ; Attempt to take an item from a room.
+  $room.take.item($nick, $2)
+}
+on 2:Chat:take*: {  
+  ; Attempt to take an item from a room.
+  $room.take.item($nick, $2)
+}
+on 2:Chat:!pick up *: {  
+  ; Attempt to take an item from a room.
+  $room.take.item($nick, $3)
+}
+on 2:Chat:pick up *: {  
+  ; Attempt to take an item from a room.
+  $room.take.item($nick, $3)
+}
+on 2:Chat:!get*: {  
+  ; Attempt to take an item from a room.
+  $room.take.item($nick, $2)
+}
+on 2:Chat:get*: {  
+  ; Attempt to take an item from a room.
+  $room.take.item($nick, $2)
 }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -235,6 +281,11 @@ on 2:Chat:!drop*: {
   ; Attempt to drop an item from inventory to the room.
   $room.dropitem($nick, $2)
 }
+on 2:Chat:drop *: {  
+  ; Attempt to drop an item from inventory to the room.
+  $room.dropitem($nick, $2)
+}
+
 
 ON 2:Chat:!use*: {  
 }
