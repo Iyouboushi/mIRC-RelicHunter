@@ -133,3 +133,5 @@ ShowDigSpot=false
 [Flags]
 TutorialComplete=false
 FreeStartingItems=false
+ShowPOS=false
+ShowWeather=true
