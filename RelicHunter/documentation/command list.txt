@@ -1,0 +1,220 @@
+=================
+CHANNEL COMMANDS
+=================
+These are channels that are performed in the IRC channel, not within the game itself.
+
+!new char
+This will create a new character using the nick you are currently using.  If the name is taken the bot will inform you.
+
+!logout or !log out
+Will log you out.  You do not need to provide your password with this command.
+
+
+=================
+QUERY/PRIVATE
+MESSAGE COMMANDS
+=================
+These commands can only be done in private with the bot itself, not in the channel.
+
+!newpass oldpass newpass
+This will allow you to change your character's password.  It is recommended you do this immediately after the bot sends you the message with your generated password as the generated password CANNOT BE RECOVERED.
+
+!id password
+This will log you into the bot and prompt the bot to send you a DCC Chat request (necessary to play the game).
+
+
+=================
+GAME COMMANDS
+=================
+The rest of the commands in this document are all done from within the game itself (also known as DCC Chat commands).  Do not use these in the channel or in private as they will not work there.
+
+
+;;;;;;;;;;;;;;;;;;;
+See who's online
+;;;;;;;;;;;;;;;;;;;
+
+!who
+!who's online
+!online list
+
+These commands will show you who's currently logged into and playing the game.
+
+
+;;;;;;;;;;;;;;;;;;;
+Chatting Commands
+;;;;;;;;;;;;;;;;;;;
+
+say message
+This will show your message to people who are in the same room you're in.  ex: say hello room!  -> <Iyouboushi> Hello room!
+
+shout message
+This will show your message to the people who are in the same zone (think of a zone like a planet) you're in. ex: shout Hello world -> [Shout] <Iyouboushi> Hello world!
+
+global message
+This will show your message to every person who's playing.  ex: global Hello universe! -> [Global] <Iyouboushi> Hello universe!
+
+emote message
+This will show that you did an action to people who are in the same room.  ex: emote bows  ->  * Iyouboushi bows
+
+
+;;;;;;;;;;;;;;;;;;;
+Help Commands
+;;;;;;;;;;;;;;;;;;;
+
+help [topic]
+Used by itself, help will show you a list of topics you can get help on.  Otherwise, you can use help topic to get more information on that topic.
+
+
+;;;;;;;;;;;;;;;;;;;
+Checking Stats/Info
+;;;;;;;;;;;;;;;;;;;
+
+!hp
+This will show you your current health
+
+!tp
+This will show you your current tp
+
+!hunger
+This will show you your current hunger level.  Remember if your fullness amount drops below a certain threshold you will stop regenerating hp naturally.
+
+!stamina
+!stam
+
+These commands will show you your current stamina.  Stamina is needed for chopping trees or digging with a pickaxe.
+
+!warmth
+This shows you how warm you are.  Certain areas require a certain warmth to enter, especially underground.
+
+!level
+This will show you what level you are.
+
+!race
+Shows you what race you picked.
+
+!gender
+Shows you what gender you picked.
+
+!class
+Shows you what class you are.
+
+!xp
+!stats
+!status
+!techs
+!skills
+   None of these work as of 091814
+
+
+;;;;;;;;;;;;;;;;;;;
+Equipment Commands
+;;;;;;;;;;;;;;;;;;;
+
+None as of 091814
+
+
+;;;;;;;;;;;;;;;;;;;
+Movement Commands
+;;;;;;;;;;;;;;;;;;;
+
+!go direction
+go direction
+north
+east
+south
+west
+up
+down
+
+These all let you move through the world. For standard directions you can just type the name of the direction to go that way. For custom directions, such as when picking your race and class, you will need to use the !go or go command.
+
+
+;;;;;;;;;;;;;;;;;;;
+Digging Command
+;;;;;;;;;;;;;;;;;;;
+
+!dig direction
+dig direction
+
+Once you have a pickaxe you can start digging to obtain ores. Only certain rooms allow digging, though once you're underground you can pretty much go anywhere you want.  Valid directions are: north, east, south, west, up and down.  Not all rooms allow you to dig in every direction.
+
+
+;;;;;;;;;;;;;;;;;;;
+Room Commands
+;;;;;;;;;;;;;;;;;;;
+
+!weather
+Shows you the current weather if you're not in an inside location.
+
+!moon
+Shows you the current moon if you're not in an inside location.
+
+!time
+Shows you the zone's current time of day (morning, noon, evening, night).
+
+!pos
+Shows you your current POS in the universe.
+
+!look
+look
+
+Shows you the current room information (name, description, exits, players in the room, objects in the room, etc).
+
+look at object/person/inventoryobject
+ Currently not in the game as 091814
+
+!take item
+!get
+!pick up
+take item
+pick up
+get 
+
+Attempts to take an item from the room you're in, if you have the inventory space for it.
+
+
+;;;;;;;;;;;;;;;;;;;
+Inventory Commands
+;;;;;;;;;;;;;;;;;;;
+
+!items
+!inventory
+items
+inventory
+
+Shows you what you are carrying in your inventory.
+
+
+!drop item
+drop item
+
+Attempts to drop an item that you have in your inventory into the room you're standing in.
+
+
+;;;;;;;;;;;;;;;;;;;
+Action Commands
+;;;;;;;;;;;;;;;;;;;
+
+None as of 091814
+
+
+;;;;;;;;;;;;;;;;;;;
+Setting Toggles
+;;;;;;;;;;;;;;;;;;;
+
+!toggle flag
+This command will toggle a setting on or off.  The settings are as follows:
+
+ShowHunger
+ - Shows the "You are starving" message if your hunger gets too low.  This is set to true by default.
+
+ShowDigSpot
+ - The game will inform you if the dig command can be used in the room you're in.  This is set to false by default.
+
+ShowPOS 
+ - This will show you your POS after the room's name.  Such as:  [Void] (0:0:5)   This is set to false by default.
+
+
+
+For these commands you can just use !toggle flag  -- you don't need to provide a on/off or true/false.  ex: !toggle ShowHunger  to turn it off. Then !toggle ShowHunger to turn it back on.
+
