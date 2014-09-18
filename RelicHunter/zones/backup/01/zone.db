@@ -52,6 +52,19 @@ night=2
 ROOMS go below this line
 ==============================================================
 
+[DefaultRoom]
+Name=Field
+Desc=You're in a field. Nothing spectacular to see here.
+Shop=false
+ShopName=
+WarmthNeeded=0
+UnderWater=false
+Inside=false
+Trees=0
+CanDig=false
+
+
+
 [0:0:5]
 Name=The Void
 Desc=You open your eyes and find yourself in a bright white area. A loud voice echos in your mind.  "You are without form. Your first order of business is to choose a race that you identify with. Use go race (such as go human).  Valid races are: Human, Elf, CreatureOfScience"  You may also use !help racename for more information on the races.
@@ -110,8 +123,6 @@ trees=0
 
 ; Room Items
 Items=
-
-
 
 
 [0:0:3]

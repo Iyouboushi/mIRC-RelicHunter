@@ -122,7 +122,9 @@ alias dcc.zone.message {
     if ((($3 = weather) || ($3 = moon) || ($3 = time))) { 
       var %inside.zone $get.zone(%nick) | var %inside.room $get.room(%nick)
       if ($readini($zone(%inside.zone), %inside.room, inside) != true) { 
-        if (%inside.zone = $1) { msg = $+ $chat(%zp) $2 }
+        if (%inside.zone = $1) { 
+          if ($player.settings.flag(%zp, ShowWeather) = true) { msg = $+ $chat(%zp) $2 }
+        }
       }
     } 
     else { 

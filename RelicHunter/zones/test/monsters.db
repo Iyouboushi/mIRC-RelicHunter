@@ -1,0 +1,29 @@
+; The first part of the file is to define what monsters appear for the day/night for the various types of zones within the world.
+
+[void]
+day=
+night=
+encounterRate=0
+
+[cave]
+day=CaveBat
+night=
+encounterrate=10
+
+
+
+; The second part of the file is to define the monsters themselves.
+
+
+[CaveBat]
+Name=Cave Bat
+hp=
+str=
+def=
+int=
+agi=
+char=
+techs=
+weapon=
+levelmin=1
+levelmax=2

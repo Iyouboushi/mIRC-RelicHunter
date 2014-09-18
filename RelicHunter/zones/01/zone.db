@@ -3,7 +3,7 @@ Name=Tutorial
 NumberOfRooms=3
 Active=true
 CanModify=no
-GameDays=1
+GameDays=3
 
 
 ==============================================================
@@ -20,7 +20,7 @@ do not remove or modify the Moon Phase section as it will cause
 errors.
 ==============================================================
 [MoonPhase]
-CurrentMoonPhase=Crescent
+CurrentMoonPhase=Quarter
 CurrentMoonTurn=1
 
 [MoonPhaseTime]
@@ -38,8 +38,8 @@ remove or modify the time of day section as it will cause
 errors.
 ==============================================================
 [TimeOfDay]
-CurrentTimeOfDay=Morning
-CurrentTimeOfDayTurn=2
+CurrentTimeOfDay=Noon
+CurrentTimeOfDayTurn=1
 
 [TimeOfDayTime]
 morning=2
@@ -51,6 +51,18 @@ night=2
 ==============================================================
 ROOMS go below this line
 ==============================================================
+
+[DefaultRoom]
+Name=Field
+Desc=You're in a field. Nothing spectacular to see here.
+Shop=false
+ShopName=
+WarmthNeeded=0
+UnderWater=false
+Inside=false
+Trees=0
+CanDig=false
+
 
 [0:0:5]
 Name=The Void
@@ -116,13 +128,14 @@ Items=
 
 [0:0:3]
 Name=The Void
-Desc=You have reached the end of the game as of 091814
+Desc=You have reached the end of the game as of 091814.  If you still want to play around and test, go DOWN one more time.
 
 ; Exits
-ExitList=
-
+ExitList=down
+down=0:0:0
 
 ; Exit Actions
+downAction=$changezone($1, test) | writeini $char($1) currentstats warmth 100 | $dcc.private.message($1, 7* Your warmth has been increased to 100 for this test.)
 
 
 ; Room Flags

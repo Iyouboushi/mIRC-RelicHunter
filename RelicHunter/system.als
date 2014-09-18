@@ -65,6 +65,7 @@ mon { return " $+ $mircdir $+ %monster_folder $+ $1 $+ .char" }
 npc { return " $+ $mircdir $+ %npc_folder $+ $1 $+ .char" }
 zone { return " $+ $mircdir $+ %zones_folder $+ $1 $+ \ $+ zone.db" }
 zapped { return " $+ $mircdir $+ %player_folder $+ zapped $+ \ $+ $1 $+ .char" }
+changezone { writeini $char($1) location zone $2 }
 lstfile { return " $+ $mircdir $+ lsts\ $+ $1" }
 txtfile {  return " $+ $mircdir $+ txts\ $+ $1" }
 dbfile { return " $+ $mircdir $+ dbs\ $+ $1" }

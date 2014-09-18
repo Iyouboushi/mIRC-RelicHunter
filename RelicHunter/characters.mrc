@@ -6,25 +6,25 @@
 ; Create a new character
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 on 1:TEXT:!new char*:*: {  $checkscript($2-)
-  if ($isfile($char($nick)) = $true) { $display.private.message($readini(translation.dat, system, PlayerExists)) | halt }
-  if ($isfile($char($nick $+ _clone)) = $true) { $display.private.message($readini(translation.dat, system, NameReserved)) | halt }
-  if ($isfile($char(evil_ $+ $nick)) = $true)  { $display.private.message($readini(translation.dat, system, NameReserved)) | halt }
-  if ($isfile($char($nick $+ _summon)) = $true) { $display.private.message($readini(translation.dat, system, NameReserved)) | halt }
-  if ($isfile($mon($nick)) = $true) { $display.private.message($readini(translation.dat, system, NameReserved)) | halt }
-  if ($isfile($boss($nick)) = $true) { $display.private.message($readini(translation.dat, system, NameReserved)) | halt  }
-  if ($isfile($npc($nick)) = $true) { $display.private.message($readini(translation.dat, system, NameReserved)) | halt }
-  if ($isfile($summon($nick)) = $true) { $display.private.message($readini(translation.dat, system, NameReserved)) | halt }
-  if ($nick = $nick $+ _clone) { $display.private.message($readini(translation.dat, system, NameReserved)) | halt }
-  if ($nick = evil_ $+ $nick) { $display.private.message($readini(translation.dat, system, NameReserved)) | halt }
-  if ($nick = monster_warmachine) { $display.private.message($readini(translation.dat, system, NameReserved)) | halt }
-  if ($nick = demon_wall) { $display.private.message($readini(translation.dat, system, NameReserved)) | halt }
-  if ($nick = pirate_scallywag) { $display.private.message($readini(translation.dat, system, NameReserved)) | halt }
-  if ($nick = pirate_firstmatey) { $display.private.message($readini(translation.dat, system, NameReserved)) | halt }
-  if ($nick = bandit_leader) { $display.private.message($readini(translation.dat, system, NameReserved)) | halt }
-  if ($nick = bandit_minion) { $display.private.message($readini(translation.dat, system, NameReserved)) | halt }
-  if ($nick = crystal_shadow) { $display.private.message($readini(translation.dat, system, NameReserved)) | halt }
-  if ($nick = alliedforces_president) { $display.private.message($readini(translation.dat, system, NameReserved)) | halt }
-  if ((($nick = frost_monster) || ($nick = frost_monster1) || ($nick = frost_monster2))) { $display.private.message($readini(translation.dat, system, NameReserved)) | halt }
+  if ($isfile($char($nick)) = $true) { $display.private.message($readini(translation.dat, system, PlayerExists),privatemessage) | halt }
+  if ($isfile($char($nick $+ _clone)) = $true) { $display.private.message($readini(translation.dat, system, NameReserved),privatemessage) | halt }
+  if ($isfile($char(evil_ $+ $nick)) = $true)  { $display.private.message($readini(translation.dat, system, NameReserved),privatemessage) | halt }
+  if ($isfile($char($nick $+ _summon)) = $true) { $display.private.message($readini(translation.dat, system, NameReserved),privatemessage) | halt }
+  if ($isfile($mon($nick)) = $true) { $display.private.message($readini(translation.dat, system, NameReserved),privatemessage) | halt }
+  if ($isfile($boss($nick)) = $true) { $display.private.message($readini(translation.dat, system, NameReserved),privatemessage) | halt  }
+  if ($isfile($npc($nick)) = $true) { $display.private.message($readini(translation.dat, system, NameReserved),privatemessage) | halt }
+  if ($isfile($summon($nick)) = $true) { $display.private.message($readini(translation.dat, system, NameReserved),privatemessage) | halt }
+  if ($nick = $nick $+ _clone) { $display.private.message($readini(translation.dat, system, NameReserved),privatemessage) | halt }
+  if ($nick = evil_ $+ $nick) { $display.private.message($readini(translation.dat, system, NameReserved),privatemessage) | halt }
+  if ($nick = monster_warmachine) { $display.private.message($readini(translation.dat, system, NameReserved),privatemessage) | halt }
+  if ($nick = demon_wall) { $display.private.message($readini(translation.dat, system, NameReserved),privatemessage) | halt }
+  if ($nick = pirate_scallywag) { $display.private.message($readini(translation.dat, system, NameReserved),privatemessage) | halt }
+  if ($nick = pirate_firstmatey) { $display.private.message($readini(translation.dat, system, NameReserved),privatemessage) | halt }
+  if ($nick = bandit_leader) { $display.private.message($readini(translation.dat, system, NameReserved),privatemessage) | halt }
+  if ($nick = bandit_minion) { $display.private.message($readini(translation.dat, system, NameReserved),privatemessage) | halt }
+  if ($nick = crystal_shadow) { $display.private.message($readini(translation.dat, system, NameReserved),privatemessage) | halt }
+  if ($nick = alliedforces_president) { $display.private.message($readini(translation.dat, system, NameReserved),privatemessage) | halt }
+  if ((($nick = frost_monster) || ($nick = frost_monster1) || ($nick = frost_monster2))) { $display.private.message($readini(translation.dat, system, NameReserved),privatemessage) | halt }
 
   ; Create the new character now
   .copy $char(new_chr) $char($nick)
@@ -201,7 +201,7 @@ on 2:Chat:east: { $go($nick, east) }
 on 2:Chat:south: { $go($nick, south) }
 on 2:Chat:west: { $go($nick, west) }
 on 2:Chat:down: { $go($nick, down) }
-on 2:Chat:up: { $go($nick,up }
+on 2:Chat:up: {  $go($nick, up) }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Digging Command
@@ -239,8 +239,8 @@ on 2:Chat:!time*: {
 }
 
 on 2:Chat:!pos: {  $dcc.private.message($nick, $readini(translation.dat, system, CurrentPOS)) }
-on 2:Chat:!look: { $look.room($nick) }
-on 2:Chat:look: { $look.room($nick) }
+on 2:Chat:!look: { $room.look($nick) }
+on 2:Chat:look: { $room.look($nick) }
 
 on 2:Chat:!look at*: {
   ; Is it a person in the same room?
@@ -341,6 +341,27 @@ on 2:Chat:!toggle*: {
     }
   }
 
+  if ($2 = showPOS) {
+    if ($player.settings.flag($nick, ShowPOS) = true) { 
+      writeini $char($nick) settings ShowPOS false
+      $dcc.private.message($nick, 3The setting: Show POS has been set to false) | halt 
+    }
+    if ($player.settings.flag($nick, ShowPOS) = false) { 
+      writeini $char($nick) settings ShowPOS true
+      $dcc.private.message($nick, 3The setting: Show POS has been set to true) | halt 
+    }
+  }
+
+  if ($2 = showWeather) {
+    if ($player.settings.flag($nick, showWeather) = true) { 
+      writeini $char($nick) settings showWeather false
+      $dcc.private.message($nick, 3The setting: Show Weather has been set to false) | halt 
+    }
+    if ($player.settings.flag($nick, showWeather) = false) { 
+      writeini $char($nick) settings showWeather true
+      $dcc.private.message($nick, 3The setting: Show Weather has been set to true) | halt 
+    }
+  }
 
   ; More settings can be here.
 

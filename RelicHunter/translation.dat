@@ -61,6 +61,7 @@ CurrentArmorHandsEquipped=Current Hand Armor
 ViewWeaponList=$chr(3) $+ 3 $+  $+ %real.name 
 DiggingAction=$chr(3) $+ 3 $+  $+ $get.name($1) begins digging %direction $+ !
 YouDigDirection=$chr(3) $+ 3 $+ You begin to dig %direction $+ !
+YouLinkRooms=$chr(3) $+ 3 $+ You connect this area to the one in the %direction direction!
 CanDigHere=$chr(3) $+ 5 $+ You can dig here with a pickaxe.
 ViewItems=$chr(3) $+ 3 $+ You are carrying the following items: %items.list 
 CarryingNoItems=$chr(3) $+ 3 $+ You are not carrying any items

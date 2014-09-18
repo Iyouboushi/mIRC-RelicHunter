@@ -155,77 +155,6 @@ skill.increase {
 weapon.equipped {  
 }
 
-look.room {
-  ; $1 = user
-
-  ; Are you in battle? If so, you can't look at the room.
-  if ($in.battle($1) = true) {  $battle.look($1) | halt }
-
-  ; get zone
-  set %look.zone $get.zone($1)
-
-  ; get room
-  set %look.room $get.room($1)
-
-  ; Get zone + room
-  var %look.zone.and.room $get.zone.and.room($1)
-
-  ; build the room desc and show it
-  msg =$nick 12[ $+ $readini($zone(%look.zone), %look.room, name) $+  ]
-  msg =$nick 3 $+ $readini($zone(%look.zone), %look.room, desc)
-
-  ; Check for trees
-  var %room.tree.count $readini($zone(%look.zone), %look.room, trees)
-  if (%room.tree.count > 0) { 
-    msg =$nick 3You see5 %room.tree.count $iif(%room.tree.count > 1, trees, tree) 3here 
-  }
-
-  var %look.exits $readini($zone(%look.zone), %look.room, ExitList)
-  if (%look.exits != $null) {  %look.exits = $replace(%look.exits, $chr(046), $chr(044) $chr(032)) }
-  if (%look.exits = $null) { var %look.exits none that you can see }
-
-  msg =$nick 10Exits:12 %look.exits
-
-  ; Are there any items in the room?
-  $room.look.items($1)
-
-  if (%look.items != $null) {  
-    msg =$nick 10Items laying here:12 %look.items
-    unset %look.items
-  }
-
-  ; Are there any online players in the room?
-  var %user.location $get.zone.and.room($1)
-  var %chat.look 1
-  while ($chat(%chat.look) != $null) {  var %nick $chat(%chat.look) 
-    if (%nick != $nick) {
-      var %target.location $get.zone.and.room(%nick)
-      if (%target.location = %user.location) { 
-        var %player.to.add %nick
-        if ($in.battle(%player.to.add) = true) { var %player.to.add 4 $+ %player.to.add $+ $chr(91) $+ in battle $+ $chr(93) $+ 12 }
-        %players.in.room = $addtok(%players.in.room, %player.to.add, 46)
-      }
-    }
-    inc %chat.look 1
-  } 
-
-  if (%players.in.room != $null) {
-    var %replacechar $chr(044) $chr(032)
-    %players.in.room = $replace(%players.in.room, $chr(046), %replacechar)
-    msg =$nick 10Other players here:12 %players.in.room
-  }
-
-  ; Show weather, time of day and moon
-
-  ; show dig location if flag is set to do so
-  if ($player.settings.flag($1, ShowDigSpot) = true) { 
-    if ($room.flag($1, CanDig) = true) { $dcc.private.message($1, $readini(translation.dat, system, CanDigHere)) }
-  }
-
-  unset %players.in.room | unset %look.zone | unset %look.room
-
-}
-
 look.target {
   $weapon.equipped($1) | $set_chr_name($1)
   var %equipped.accessory $readini($char($1), equipment, accessory) 
@@ -427,16 +356,43 @@ dig {
   var %current.zone $get.zone($1) | var %current.room $get.room($1) | var %current.x $get.x($1) | var %current.y $get.y($1) | var %current.z $get.z($1)
 
   ; Get the new room's location
-  if (($2 = up) || ($2 = u)) { inc %current.z 1 }
-  if (($2 = north) || ($2 = n)) { inc %current.y 1 }
-  if (($2 = east) || ($2 = e)) { inc %current.x 1 }
-  if (($2 = south) || ($2 = s)) { dec %current.y 1 }
-  if (($2 = west) || ($2 = w)) { dec %current.x 1 }
-  if (($2 = down) || ($2 = d)) { dec %current.z 1 }
+  var %direction down 
+  if (($2 = up) || ($2 = u)) { var %direction up | inc %current.z 1 }
+  if (($2 = north) || ($2 = n)) { var %direction north |  inc %current.y 1 }
+  if (($2 = east) || ($2 = e)) { var %direction east |  inc %current.x 1 }
+  if (($2 = south) || ($2 = s)) { var %direction south | dec %current.y 1 }
+  if (($2 = west) || ($2 = w)) { var %direction west | dec %current.x 1 }
+  if (($2 = down) || ($2 = d)) { var %direction down | dec %current.z 1 }
 
   var %room.to.make %current.x $+ $chr(58) $+ %current.y $+ $chr(58) $+ %current.z
   if ($readini($zone($get.zone($1)), %room.to.make, CanDig) = false) { $dcc.private.message($1, $readini(translation.dat, errors, CannotDigDirection))  | halt  }
-  if ($readini($zone($get.zone($1)), %room.to.make, Name) != $null) { $dcc.private.message($1, $readini(translation.dat, errors, CannotDigDirection))  | halt  }
+  if ($readini($zone($get.zone($1)), %room.to.make, Name) != $null) { 
+
+    ; So the room exists.  Can we link to it? (If the CanDig = false then no)
+    if ($readini($zone($get.zone($1)), %room.to.make, CanDig) = false) { $dcc.private.message($1, $readini(translation.dat, errors, CannotDigDirection))  | halt  }
+
+    ; So we can link to it.  The first thing we need to do is figure out the opposite direction.
+
+    if (%direction = down) { var %opposite.direction up }
+    if (%direction = up) { var %opposite.direction down }
+    if (%direction = north) { var %opposite.direction south }
+    if (%direction = east) { var %opposite.direction west }
+    if (%direction = south) { var %opposite.direction north }
+    if (%direction = west) { var %opposite.direction east }
+
+    ; Is there already a link to it?
+    var %islinked $readini($zone($get.zone($1)), %room.to.make, %opposite.direction)
+    if (%islinked != $null) { $dcc.private.message($1, $readini(translation.dat, errors, CannotDigDirection))  | halt  }
+
+    ; Link the rooms
+    $room.add.exit(%current.zone, %room.to.make, %opposite.direction, %current.room)
+    $room.add.exit(%current.zone, %current.room, %direction, %room.to.make)
+
+    $dcc.private.message($1, $readini(translation.dat, system, YouLinkRooms))
+    $go($1, %direction)
+
+    halt
+  }
 
 
   ; Decrease Stamina
@@ -445,12 +401,8 @@ dig {
   ; Create the room
   var %direction $2
 
-  if (($2 = d) || ($2 = down)) { var %direction down | $room.create.dig($1, down, %room.to.make, %current.z) } 
-  if (($2 = u) || ($2 = up)) { var %direction up | $room.create.dig($1, up, %room.to.make, %current.z) }
-  if (($2 = n) || ($2 = north)) { var %direction north | $room.create.dig($1, north, %room.to.make, %current.z) } 
-  if (($2 = e) || ($2 = east)) { var %direction east | $room.create.dig($1, east, %room.to.make, %current.z) } 
-  if (($2 = s) || ($2 = south)) { var %direction south | $room.create.dig($1, south, %room.to.make, %current.z) } 
-  if (($2 = w) || ($2 = west)) { var %direction west | $room.create.dig($1, west, %room.to.make, %current.z) } 
+  $room.create.dig($1, %direction, %room.to.make, %current.z) 
+
 
   ; Announce that we've dug down.
   $announce.room.action($1, digging, %direction)

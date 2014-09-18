@@ -1,0 +1,117 @@
+[info]
+Name=Testing
+NumberOfRooms=2
+Active=true
+CanModify=no
+GameDays=2
+
+
+==============================================================
+The weather is controlled in this file for the entire zone.
+==============================================================
+[weather]
+current=calm
+list=calm.gloomy
+boost=.25
+
+==============================================================
+The moon phases are controlled in this file as well.  Please
+do not remove or modify the Moon Phase section as it will cause
+errors.
+==============================================================
+[MoonPhase]
+CurrentMoonPhase=Gibbous
+CurrentMoonTurn=3
+
+[MoonPhaseTime]
+full=10
+new=1
+gibbous=5
+quarter=4
+crescent=2
+blood=1
+BloodMoonChance=10
+
+==============================================================
+The "Time of Day" is controlled in this file. Please do not
+remove or modify the time of day section as it will cause
+errors.
+==============================================================
+[TimeOfDay]
+CurrentTimeOfDay=Morning
+CurrentTimeOfDayTurn=2
+
+[TimeOfDayTime]
+morning=2
+noon=5
+evening=2
+night=2
+
+
+==============================================================
+ROOMS go below this line
+==============================================================
+
+[DefaultRoom]
+Name=The Flat World
+Desc=You are standing in a rather large field.  $iif($readini($zone($get.zone($1)), $get.room($1), trees) > 0, You can see some trees scattered about)
+Shop=false
+ShopName=
+WarmthNeeded=0
+UnderWater=false
+Inside=false
+Trees=1000
+CanDig=true
+
+
+
+
+[0:0:0]
+Name=The Flat World
+Desc=You are standing in a rather large field.  $iif($readini($zone($get.zone($1)), $get.room($1), trees) > 0, You can see some trees scattered about)
+
+; Exits
+ExitList=east
+east=1:0:0
+
+
+; Room Flags
+Shop=false
+ShopName=
+WarmthNeeded=0
+UnderWater=false
+Inside=false
+zone=void
+trees=1000
+CanDig=true
+
+; Room Items
+items=Pickaxe
+Pickaxe=1000
+
+
+
+
+[1:0:0]
+Name=The Flat World
+Desc=You are standing in a rather large field.  $iif($readini($zone($get.zone($1)), $get.room($1), trees) > 0, You can see some trees scattered about)
+
+; Exits
+ExitList=west
+West=0:0:0
+
+
+; Room Flags
+CanDig=true
+Shop=false
+ShopName=
+WarmthNeeded=0
+UnderWater=false
+Inside=false
+zone=void
+trees=1600
+
+; Room Items
+Items=
+
+
