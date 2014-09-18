@@ -1,6 +1,109 @@
 This text file will serve as a source of information as to how the zone files are set up and what options do what.
 
+Zones (or "Worlds" in the broad sense of things) are a collection of rooms, monsters, npcs, and objects that players can move through and interact with.
 
-[#:#] - The room number.  The format is [x:y] for default room locations.  For digging/mining, the rooms will be [#:#:-#] or [X:Y:-Z]
+Each world is stored in a folder in \zones\  
+
+The Zones can be named whatever you want, though I prefer numbers just to keep things in some kind of sequential order.
+
+Inside the \zones\name\ folder are a few database and lst files:
+
+drops.db
+monsters.db
+npcs.db
+objects.db
+steal.db
+zone.db
+
+ores.lst
+
+
+=====================
+DROPS.DB
+=====================
+drops.db contains the items that monsters can drop in addition to money and xp.  If there are no drops set then the monster won't drop anything else.
+
+This section will be expanded in the future.
+
+
+=====================
+MONSTERS.DB
+=====================
+monsters.db contains the templates for all the various monsters in the world, as well as the encounter rates for each of the broad areas found in the world.
+
+This section will be expanded in the future.
+
+
+=====================
+NPCS.DB
+=====================
+npcs.db contains NPC information.
+
+This section will be expanded in the future.
+
+
+=====================
+OBJECTS.DB
+=====================
+objects.db contains the objects that are found in the rooms and what happens when you perform various actions upon the object.
+
+This section will be expanded in the future.
+
+
+=====================
+SHOPS.DB
+=====================
+shops.db contains the shops found in the zone and contains the list of items for sell and how much they're worth.  Also contains custom purchase/sell messages.
+
+This section will be expanded in the future.
+
+
+=====================
+STEAL.DB
+=====================
+steal.db contains the items that players can steal from monsters.  
+
+This section will be expanded in the future.
+
+
+=====================
+ZONE.DB
+=====================
+zone.db is the world file that contains the name of the world, the total number of rooms, if the zone is active (live), the total number of Game Days that have passed in that zone, the weather, moon phase, time of day, and all the rooms.
+
+
+The rooms themselves are broken out into this:
+
+[name] - The name of the room is on an x:y:z coordinate system.  So the name will look something like [1:1:0]
+
+Name= The name of the room
+
+Desc= What players see when they enter the room or use 'look'
+
+ExitList= All visible exits that are in the room. They are tokenized and look something like this: east.north.west
+
+Each exit can then have an optional "Exit Action" that can do a variety of things (such as set race, class, gender, set flags, check for flags, etc)
+
+After that, the room has a series of "room flags".
+
+Shop= true/false  - Is this room a shop?
+
+ShopName=name of shop, if there is one
+
+WarmthNeeded= # - how much warmth is needed to enter this room?  If a player has less than this they won't be able to enter.
+
+UnderWater= true/false - Is this room under water? If true, players will need a special accessory to enter.
+
+Inside= true/false - Is this room inside?
+
+zone= This flag is used for monsters.db to look up the encounter rate and which monsters can enter.
+
+Items= A list of items that are in the room that players can take.  The room can hold 15 unique items but an unlimited amount of those 15 items.
+
+
+=====================
+ORES.LST
+=====================
+ores.lst contains a list of all the ores that can be found by digging in that world. The way the bot picks the ores depends on what z level the room is on, but generally the .lst files should contain the least valuable ores on top and the most valuable on the bottom.
 
 

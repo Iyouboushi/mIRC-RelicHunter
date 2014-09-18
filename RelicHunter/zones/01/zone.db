@@ -1,6 +1,6 @@
 [info]
 Name=Tutorial
-NumberOfRooms=2
+NumberOfRooms=3
 Active=true
 CanModify=no
 GameDays=1
@@ -70,6 +70,7 @@ CreatureOfScienceAction=/.echo -q $setrace($1,ScienceCreation)
 
 ; Room Flags
 Shop=false
+ShopName=
 WarmthNeeded=-100
 UnderWater=false
 Inside=true
@@ -100,6 +101,7 @@ OtherAction=/.echo -q $setgender($1, other)
 ; Room Flags
 CanDig=false
 Shop=false
+ShopName=
 WarmthNeeded=-100
 UnderWater=false
 Inside=true
@@ -114,7 +116,7 @@ Items=
 
 [0:0:3]
 Name=The Void
-Desc=You have reached the end of the game as of 091614
+Desc=You have reached the end of the game as of 091814
 
 ; Exits
 ExitList=
@@ -126,6 +128,7 @@ ExitList=
 ; Room Flags
 CanDig=false
 Shop=false
+ShopName=
 WarmthNeeded=-100
 UnderWater=false
 Inside=true

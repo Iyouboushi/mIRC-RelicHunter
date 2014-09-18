@@ -1,0 +1,5 @@
+[ShopName]
+List=list.of.items.for.sale
+ItemName=price
+PurchaseMessage=a message displayed when buying an item (such as a custom "THANK YOUUUU" type message)
+SellMessage=a message displayed when selling an item.

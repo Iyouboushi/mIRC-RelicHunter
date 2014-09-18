@@ -4,6 +4,11 @@ current.stamina { return $readini($char($1), currentstats, stamina) }
 current.hunger { return $readini($char($1), currentstats, hunger) }
 current.warmth { return $readini($char($1), currentstats, warmth) }
 in.battle { return $readini($char($1), currentstats, inbattle) }
+player.settings.flag {
+  var %flag.check $readini($char($1), settings, $2)
+  if (%flag.check = $null) { return false }
+  else { return %flag.check }
+}
 get.name { return $readini($char($1), basestats, name) } 
 gender { return $readini($char($1), Info, Gender) }
 gender2 {
@@ -153,6 +158,9 @@ weapon.equipped {
 look.room {
   ; $1 = user
 
+  ; Are you in battle? If so, you can't look at the room.
+  if ($in.battle($1) = true) {  $battle.look($1) | halt }
+
   ; get zone
   set %look.zone $get.zone($1)
 
@@ -179,8 +187,7 @@ look.room {
   msg =$nick 10Exits:12 %look.exits
 
   ; Are there any items in the room?
-  $look.room.items($1)
-
+  $room.look.items($1)
 
   if (%look.items != $null) {  
     msg =$nick 10Items laying here:12 %look.items
@@ -193,7 +200,11 @@ look.room {
   while ($chat(%chat.look) != $null) {  var %nick $chat(%chat.look) 
     if (%nick != $nick) {
       var %target.location $get.zone.and.room(%nick)
-      if (%target.location = %user.location) { %players.in.room = $addtok(%players.in.room, %nick, 46) }
+      if (%target.location = %user.location) { 
+        var %player.to.add %nick
+        if ($in.battle(%player.to.add) = true) { var %player.to.add 4 $+ %player.to.add $+ $chr(91) $+ in battle $+ $chr(93) $+ 12 }
+        %players.in.room = $addtok(%players.in.room, %player.to.add, 46)
+      }
     }
     inc %chat.look 1
   } 
@@ -206,99 +217,13 @@ look.room {
 
   ; Show weather, time of day and moon
 
+  ; show dig location if flag is set to do so
+  if ($player.settings.flag($1, ShowDigSpot) = true) { 
+    if ($room.flag($1, CanDig) = true) { $dcc.private.message($1, $readini(translation.dat, system, CanDigHere)) }
+  }
+
   unset %players.in.room | unset %look.zone | unset %look.room
 
-}
-look.room.items {
-  var %room.item.list $readini($zone(%look.zone), %look.room, Items)
-  var %value.item 1 | var %number.of.items $numtok(%room.item.list,46)
-
-  while (%value.item <= %number.of.items) {
-    var %item.name $gettok(%room.item.list, %value.item, 46)
-    var %item.amount $readini($zone(%look.zone), %look.room,%item.name)
-
-    if (%item.amount = $null) { var %item.amount 1 }
-
-    ; add the item and the amount to the item list
-    var %item_to_add %item.name $+ $chr(040) $+ %item.amount $+ $chr(041) 
-    %look.items = $addtok(%look.items,%item_to_add,46)
-
-    inc %value.item 1 
-  }
-
-  %look.items = $replace(%look.items, $chr(046), $chr(044) $chr(032)) 
-}
-
-room.count.items.individual {
-  var %room.total.item.count 0
-
-  var %current.zone $get.zone($1) | var %current.room $get.room($1)
-  var %room.item.list $readini($zone(%current.zone), %current.room,items)
-  var %value.item 1 | var %number.of.items $numtok(%room.item.list,46)
-
-  while (%value.item <= %number.of.items) {
-    var %item.name $gettok(%room.item.list, %value.item, 46)
-    var %item.amount $readini($zone(%current.zone), %current.room,%item.name)
-
-    if (%item.amount = $null) { var %item.amount 1 }
-
-    inc %room.total.item.count %item.amount
-    inc %value.item 1 
-  }
-
-  return %room.total.item.count
-}
-
-room.count.items {
-  var %current.zone $get.zone($1) | var %current.room $get.room($1)
-  var %room.item.list $readini($zone(%current.zone), %current.room,items)
-  var %number.of.room.items $numtok(%room.item.list,46)
-  if (%number.of.room.items = $null) { return 0 }
-  return %number.of.room.items
-}
-
-room.item.amount {
-  var %current.zone $get.zone($1) | var %current.room $get.room($1)
-  var %room.item.list $readini($zone(%current.zone), %current.room, items)
-  var %item.amount $readini($zone(%current.zone), %current.room, $2)
-
-  if (%item.amount < 0) { writeini $zone(%current.zone) %current.room $2 0 | return 0 }
-  if (%item.amount = $null) { return 0 }
-  return %item.amount
-}
-
-room.add.item {
-  var %current.zone $get.zone($1) | var %current.room $get.room($1)
-  var %room.item.list $readini($zone(%current.zone), %current.room, items)
-
-  %room.item.list = $addtok(%room.item.list, $2, 46)
-  var %item.amount $room.item.amount($1, $2)
-
-  if (%item.amount = $null) { var %item.amount 0 }
-  inc %item.amount 1
-
-  writeini $zone(%current.zone) %current.room $2 %item.amount
-  writeini $zone(%current.zone) %current.room items %room.item.list
-
-  unset %room.item.list
-}
-
-room.remove.item {
-  var %current.zone $get.zone($1) | var %current.room $get.room($1)
-  var %room.item.list $readini($zone(%current.zone), %current.room, items)
-
-  var %item.amount $readini($zone(%current.zone), %current.room, $2)
-  if (%item.amount = $null) { var %item.amount 1 }
-  dec %item.amount 1
-  writeini $zone(%current.zone) %current.room $2 %item.amount
-
-  if (%item.amount <= 0) {  
-    %room.item.list = $remtok(%room.item.list,$2,1,46) 
-    if (%room.item.list = $null) { remini $zone(%current.zone) %current.room items }
-    else {  writeini $zone(%current.zone) %current.room items %room.item.list }
-  }
-
-  unset %room.item.list
 }
 
 look.target {
@@ -342,9 +267,13 @@ item.remove {
   var %player.item.count $item.total.count($1, $2)
   dec %player.item.count 1
   writeini $char($1) items count %player.item.count
+
+  ; Remove from the list
+  var %player.item.list $readini($char($1), items, list)
+  var %player.item.list $remtok(%player.item.list, $2, 46)
+  if (%player.item.list = $null) { writeini $char($1) items list nothing }
+  else { writeini $char($1) items list %player.item.list  }
 }
-
-
 item.add {
   var %player.item.amount $item.count($1, $2)
   inc %player.item.amount 1
@@ -353,6 +282,14 @@ item.add {
   var %player.item.count $item.total.count($1, $2)
   inc %player.item.count 1
   writeini $char($1) items count %player.item.count
+
+  ; Add to the list
+  var %player.item.list $readini($char($1), items, list)
+  if (%player.item.list = nothing) { writeini $char($1) items list $2 }
+  else { 
+    var %player.item.list $addtok(%player.item.list, $2, 46)
+    writeini $char($1) items list %player.item.list
+  }
 }
 
 inventory.count { return $readini($char($1), items, count) }
@@ -360,14 +297,56 @@ inventory {
   ; $1 = person
   ; $2 = type of inventory to show
 
-  if ($2 = all) { }
+  if ($2 = all) { 
+    $inventory.builditemslist($1)
+
+    %items.list = $replace(%items.list, $chr(046), $chr(044) $chr(032))
+
+    if (%items.list != nothing) {  $dcc.private.message($1, $readini(translation.dat, system, ViewItems)) }
+    if (%items.list = nothing) {  $dcc.private.message($1, $readini(translation.dat, system, CarryingNoItems)) }
+
+    unset %items.list
+  }
 
   if ($2 = keys) { }
 
   if ($2 = accessories) { }
 }
 
-room.dropitem { 
+inventory.builditemslist {
+  set %items.list $readini($char($1), items, list)
+
+  if (%items.list = nothing) { return }
+
+  ; If the items list isn't 'nothing' then we need to get the count of each item.
+  var %item.place 1 | var %total.item.list.count $numtok(%items.list, 46)
+
+  while (%item.place <= %total.item.list.count) {
+    var %item.name $gettok(%items.list, %item.place, 46)
+    var %item.amount $readini($char($1), items, %item.name)
+
+    if (%item.amount = $null) { var %item.amount 1 }
+
+    ; add the item and the amount to the item list
+    var %item_to_add %item.name $+  $+ $chr(040) $+ %item.amount $+ $chr(041) $+ 
+    %new.item.list = $addtok(%new.item.list,%item_to_add,46)
+
+    inc %item.place 1 
+  }
+
+  set %items.list %new.item.list
+  unset %new.item.list
+
+}
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; drops an item into the room
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+player.dropitem { 
+
+  ; Are you in battle? If so, you can't do this action
+  if ($in.battle($1) = true) {  $battle.look($1) | halt }
+
   if ($item.count($1, $2) = 0) { $dcc.private.message($1, $readini(translation.dat, errors, DoNotHaveThatItem))  | halt  }
 
   var %item.type $readini($dbfile(items.db), $2, type) 
@@ -397,7 +376,15 @@ room.dropitem {
   $dcc.private.message($1, $readini(translation.dat, system, YouDropItem))
 }
 
-room.take.item {
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; picks up an item from a
+; room
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+player.take.item {
+
+  ; Are you in battle? If so, you can't do this action
+  if ($in.battle($1) = true) {  $battle.look($1) | halt }
+
   if ($room.item.amount($1, $2) <= 0) {  $dcc.private.message($1, $readini(translation.dat, errors, RoomDoesn'tHaveItem))  | halt }
   if ($inventory.count($1) >= 15) { $dcc.private.message($1, $readini(translation.dat, errors, InventoryIsFull))  | halt }
 
@@ -414,7 +401,14 @@ room.take.item {
   $dcc.private.message($1, $readini(translation.dat, system, YouTakeItem))
 }
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; The dig command
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 dig {
+
+  ; Are you in battle? If so, you can't do this action
+  if ($in.battle($1) = true) {  $battle.look($1) | halt }
+
   ; Do we have a pickaxe?
   if ($item.count($1, Pickaxe) = 0) { $dcc.private.message($1, $readini(translation.dat, errors, DoNotHavePickaxe))  | halt  }
 
@@ -422,7 +416,7 @@ dig {
   if ($current.stamina($1) < 5) { $dcc.private.message($1, $readini(translation.dat, errors, DoNotHaveStamina))  | halt  }
 
   ; Can we dig here?
-  if ($room.flag($get.zone($1), $get.room($1), CanDig) = false) { $dcc.private.message($1, $readini(translation.dat, errors, CannotDigHere))  | halt  }
+  if ($room.flag($1, CanDig) = false) { $dcc.private.message($1, $readini(translation.dat, errors, CannotDigHere))  | halt  }
 
   ; If we're on Z level >= 0 we cannot dig anywhere except down.
   if ($get.z($1) >= 0) { 
@@ -430,99 +424,46 @@ dig {
     if ($istok(%valid.directions, $2, 46) = $false) { $dcc.private.message($1, $readini(translation.dat, errors, CannotDigDirection)) | halt }
   }
 
+  var %current.zone $get.zone($1) | var %current.room $get.room($1) | var %current.x $get.x($1) | var %current.y $get.y($1) | var %current.z $get.z($1)
+
+  ; Get the new room's location
+  if (($2 = up) || ($2 = u)) { inc %current.z 1 }
+  if (($2 = north) || ($2 = n)) { inc %current.y 1 }
+  if (($2 = east) || ($2 = e)) { inc %current.x 1 }
+  if (($2 = south) || ($2 = s)) { dec %current.y 1 }
+  if (($2 = west) || ($2 = w)) { dec %current.x 1 }
+  if (($2 = down) || ($2 = d)) { dec %current.z 1 }
+
+  var %room.to.make %current.x $+ $chr(58) $+ %current.y $+ $chr(58) $+ %current.z
+  if ($readini($zone($get.zone($1)), %room.to.make, CanDig) = false) { $dcc.private.message($1, $readini(translation.dat, errors, CannotDigDirection))  | halt  }
+  if ($readini($zone($get.zone($1)), %room.to.make, Name) != $null) { $dcc.private.message($1, $readini(translation.dat, errors, CannotDigDirection))  | halt  }
+
+
   ; Decrease Stamina
   writeini $char($1) currentstats stamina $calc($current.stamina($1) - 5) 
 
   ; Create the room
   var %direction $2
 
-  if (($2 = d) || ($2 = down)) { var %direction down | $create.room.dig($1, down) } 
-  if (($2 = u) || ($2 = up)) { var %direction up | $create.room.dig($1, up) }
-  if (($2 = n) || ($2 = north)) { var %direction north | $create.room.dig($1, north) } 
-  if (($2 = e) || ($2 = east)) { var %direction east | $create.room.dig($1, east) } 
-  if (($2 = s) || ($2 = south)) { var %direction south | $create.room.dig($1, south) } 
-  if (($2 = w) || ($2 = west)) { var %direction west | $create.room.dig($1, west) } 
+  if (($2 = d) || ($2 = down)) { var %direction down | $room.create.dig($1, down, %room.to.make, %current.z) } 
+  if (($2 = u) || ($2 = up)) { var %direction up | $room.create.dig($1, up, %room.to.make, %current.z) }
+  if (($2 = n) || ($2 = north)) { var %direction north | $room.create.dig($1, north, %room.to.make, %current.z) } 
+  if (($2 = e) || ($2 = east)) { var %direction east | $room.create.dig($1, east, %room.to.make, %current.z) } 
+  if (($2 = s) || ($2 = south)) { var %direction south | $room.create.dig($1, south, %room.to.make, %current.z) } 
+  if (($2 = w) || ($2 = west)) { var %direction west | $room.create.dig($1, west, %room.to.make, %current.z) } 
 
   ; Announce that we've dug down.
   $announce.room.action($1, digging, %direction)
   $dcc.private.message($1, $readini(translation.dat, system, YouDigDirection))
 
   ; Random chance of adding an ore if z is -5 or lower.
-  if ($get.z($1) <= -5) { 
-    if ($rand(1,10) > 4) { 
+  if (%current.z <= -5) { 
+    if ($rand(1,10) > 5) { 
       ; create ore and add to room.
-      echo -a to do: add ore
+      $room.generateore($get.zone($1), %room.to.make, %current.z)
     }
   }
 
   ; Move the char.
   $go($1, %direction)
-
-}
-
-create.room.dig {
-  ; $1 = user creating the room
-  ; $2 = direction to make the exit
-
-  var %current.zone $get.zone($1) | var %current.room $get.room($1) | var %current.x $get.x($1) | var %current.y $get.y($1) | var %current.z $get.z($1)
-
-  ; Get the new room's location
-  if ($2 = up) { inc %current.z 1 }
-  if ($2 = north) { inc %current.y 1 }
-  if ($2 = east) { inc %current.x 1 }
-  if ($2 = south) { dec %current.y 1 }
-  if ($2 = west) { dec %current.x 1 }
-  if ($2 = down) { dec %current.z 1 }
-
-  set %room.to.make %current.x $+ $chr(58) $+ %current.y $+ $chr(58) $+ %current.z
-
-  ; Create the exit in the previous room
-  writeini $zone(%current.zone) %current.room $2 %room.to.make
-  var %exit.list  $readini($zone(%current.zone), %current.room, ExitList)
-  %exit.list = $addtok(%exit.list, $2, 46)
-  writeini $zone(%current.zone) %current.room ExitList %exit.list
-  unset %exit.list
-
-  ; Create the room
-  if (%current.z >= -4) { 
-    writeini $zone(%current.zone) %room.to.make Name Dark Tunnel
-    writeini $zone(%current.zone) %room.to.make Desc A dark tunnel created by $get.name($1)
-    writeini $zone(%current.zone) %room.to.make zone tunnel
-  }
-  if (%current.z <= -5) { 
-    writeini $zone(%current.zone) %room.to.make Name Dark Cavern
-    writeini $zone(%current.zone) %room.to.make Desc A dark cavern created by $get.name($1)
-    writeini $zone(%current.zone) %room.to.make zone cavern
-  }
-
-  ; Add flags
-  writeini $zone(%current.zone) %room.to.make shop false
-  writeini $zone(%current.zone) %room.to.make warmth $round($calc(%current.z * 2),0)
-  writeini $zone(%current.zone) %room.to.make underwater false
-  writeini $zone(%current.zone) %room.to.make inside true
-  writeini $zone(%current.zone) %room.to.make trees 0
-
-  if (%current.z <= -50) { writeini $zone(%current.zone) %room.to.make CanDig false }
-  else { writeini $zone(%current.zone) %room.to.make CanDig true }
-
-
-  ; Create the exit in the current room back to the previous room
-  var %previous.exit up
-  if ($2 = north) { var %previous.exit south }
-  if ($2 = east) { var %previous.exit west }
-  if ($2 = south) { var %previous.exit north }
-  if ($2 = west) { var %previous.exit east }
-  if ($2 = up) { var %previous.exit  down }
-  if ($2 = down) { var %previous.exit up }
-
-  writeini $zone(%current.zone) %room.to.make $2 %room.to.make
-  var %exit.list  $readini($zone(%current.zone), %room.to.make , ExitList)
-  if (%exit.list != $null) { %exit.list = $addtok(%exit.list, %previous.exit, 46) }
-  if (%exit.list = $null) { %exit.list = %previous.exit }
-  writeini $zone(%current.zone) %room.to.make ExitList %exit.list
-  writeini $zone(%current.zone) %room.to.make %previous.exit %current.room
-  unset %exit.list
-
-  unset %room.to.make
-
 }

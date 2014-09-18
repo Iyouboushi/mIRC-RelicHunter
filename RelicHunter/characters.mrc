@@ -143,6 +143,12 @@ on 2:Chat:!stam*: {
   unset %real.name
 }
 
+on 2:Chat:!warmth*: { 
+  $set_chr_name($nick) 
+  $dcc.private.message($nick,$readini(translation.dat, system, ViewMyWarmth))
+  unset %real.name
+}
+
 on 2:Chat:!level*: {
   if ($1 = !leveladjust) { halt }
   if ($2 = $null) { $set_chr_name($nick) | var %player.level $bytes($round($get.level($nick),0),b) | $dcc.private.message($nick, $readini(translation.dat, system, ViewLevel)) | unset %real.name }
@@ -234,6 +240,7 @@ on 2:Chat:!time*: {
 
 on 2:Chat:!pos: {  $dcc.private.message($nick, $readini(translation.dat, system, CurrentPOS)) }
 on 2:Chat:!look: { $look.room($nick) }
+on 2:Chat:look: { $look.room($nick) }
 
 on 2:Chat:!look at*: {
   ; Is it a person in the same room?
@@ -246,49 +253,64 @@ on 2:Chat:!look at*: {
 
 on 2:Chat:!take*: {  
   ; Attempt to take an item from a room.
-  $room.take.item($nick, $2)
+  $player.take.item($nick, $2)
 }
 on 2:Chat:take*: {  
   ; Attempt to take an item from a room.
-  $room.take.item($nick, $2)
+  $player.take.item($nick, $2)
 }
 on 2:Chat:!pick up *: {  
   ; Attempt to take an item from a room.
-  $room.take.item($nick, $3)
+  $player.take.item($nick, $3)
 }
 on 2:Chat:pick up *: {  
   ; Attempt to take an item from a room.
-  $room.take.item($nick, $3)
+  $player.take.item($nick, $3)
 }
 on 2:Chat:!get*: {  
   ; Attempt to take an item from a room.
-  $room.take.item($nick, $2)
+  $player.take.item($nick, $2)
 }
 on 2:Chat:get*: {  
   ; Attempt to take an item from a room.
-  $room.take.item($nick, $2)
+  $player.take.item($nick, $2)
 }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Inventory commands
+; Inventory/Item commands
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-on 2:Chat:!items*: { $inventory($nick, all) }
+on 2:Chat:!items: { $inventory($nick, all) }
+on 2:Chat:items: { $inventory($nick, all) }
 on 2:Chat:!inventory*: { $inventory($nick, all) }
+on 2:Chat:inventory: { $inventory($nick, all) }
 on 2:Chat:!keys*: { $inventory($nick, keys) }
 on 2:Chat:!accessories*: { $inventory($nick, accessories) } 
 
 on 2:Chat:!drop*: {  
   ; Attempt to drop an item from inventory to the room.
-  $room.dropitem($nick, $2)
+  $player.dropitem($nick, $2)
 }
 on 2:Chat:drop *: {  
   ; Attempt to drop an item from inventory to the room.
-  $room.dropitem($nick, $2)
+  $player.dropitem($nick, $2)
 }
 
 
 ON 2:Chat:!use*: {  
 }
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Actions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+on 2:Chat:!push*: {  }
+on 2:Chat:push *: {  }
+
+on 2:Chat:!pull*: {  }
+on 2:Chat:pull *: {  }
+
+on 2:Chat:!eat*: {  }
+on 2:Chat:eat *: {  }
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -297,16 +319,28 @@ ON 2:Chat:!use*: {
 on 2:Chat:!toggle*: { 
   ; $2 = flag to toggle on/off
 
-  if ($2 = showhunger) {
-    if ($readini($char($nick), settings, ShowHunger) = true) { 
+  if ($2 = showhunger) { 
+    if ($player.settings.flag($nick, ShowHunger) = true) { 
       writeini $char($nick) settings ShowHunger false
       $dcc.private.message($nick, 3The setting: Show Hunger has been set to false) | halt 
     }
-    if ($readini($char($nick), settings, ShowHunger) = false) { 
+    if ($player.settings.flag($nick, ShowHunger) = false) { 
       writeini $char($nick) settings ShowHunger true
       $dcc.private.message($nick, 3The setting: Show Hunger has been set to true) | halt 
     }
   }
+
+  if ($2 = showdigspot) {
+    if ($player.settings.flag($nick, ShowDigSpot) = true) { 
+      writeini $char($nick) settings ShowDigSpot false
+      $dcc.private.message($nick, 3The setting: Show Dig Spot has been set to false) | halt 
+    }
+    if ($player.settings.flag($nick, ShowDigSpot) = false) { 
+      writeini $char($nick) settings ShowDigSpot true
+      $dcc.private.message($nick, 3The setting: Show Dig Spot has been set to true) | halt 
+    }
+  }
+
 
   ; More settings can be here.
 

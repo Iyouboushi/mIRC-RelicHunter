@@ -1,4 +1,4 @@
-game.version { return 1.0beta_091614 } 
+game.version { return 1.0beta_091814 } 
 system.dat.version { return 091314 }
 quitmsg { return Relic Hunter Bot version $game.version written by James  "Iyouboushi" }
 system_defaults_check {
@@ -25,6 +25,7 @@ system_defaults_check {
   ; Check to see if the aliases are loaded (except this one as it'd cause a loop) 
   /.load -a admin.als
   /.load -a universecontrol.als
+  /.load -a rooms.als
   /.load -a characters.als
   /.load -a movement.als
   /.load -a battle.als
@@ -73,6 +74,7 @@ boss_path { return " $+ $mircdir $+ %boss_folder $+ " }
 npc_path { return " $+ $mircdir $+ %npc_folder $+ " }
 zap_path { return " $+ $mircdir $+ %player_folder $+ %zapped_folder $+ " }
 zone_path { return " $+ $mircdir $+ %zones_folder $+ " }
+zoneores { return " $+ $mircdir $+ %zones_folder $+ $1 $+ \ores.lst" }
 zonemon { return " $+ $mircdir $+ %zones_folder $+ $1 $+ \monsters.db" }
 zonenpc { return " $+ $mircdir $+ %zones_folder $+ $1 $+ \npcs.db" }
 get.room {  return $readini($char($1), Location, Room) }
@@ -280,14 +282,6 @@ display.private.message.delay.custom {
   }
 
 }
-
-; Returns the room flag.
-room.flag { 
-  var %room.flag $readini($zone($1), $2, $3)
-  if (%room.flag = $null) { return false }
-  else { return %room.flag }
-}
-
 
 announce.room.action {
 

@@ -1,6 +1,6 @@
 [info]
 Name=Tutorial
-NumberOfRooms=2
+NumberOfRooms=3
 Active=true
 CanModify=no
 GameDays=1
@@ -10,7 +10,7 @@ GameDays=1
 The weather is controlled in this file for the entire zone.
 ==============================================================
 [weather]
-current=gloomy
+current=calm
 list=calm.gloomy
 boost=.25
 
@@ -20,7 +20,7 @@ do not remove or modify the Moon Phase section as it will cause
 errors.
 ==============================================================
 [MoonPhase]
-CurrentMoonPhase=New
+CurrentMoonPhase=Crescent
 CurrentMoonTurn=1
 
 [MoonPhaseTime]
@@ -38,8 +38,8 @@ remove or modify the time of day section as it will cause
 errors.
 ==============================================================
 [TimeOfDay]
-CurrentTimeOfDay=Evening
-CurrentTimeOfDayTurn=1
+CurrentTimeOfDay=Morning
+CurrentTimeOfDayTurn=2
 
 [TimeOfDayTime]
 morning=2
@@ -55,7 +55,6 @@ ROOMS go below this line
 [0:0:5]
 Name=The Void
 Desc=You open your eyes and find yourself in a bright white area. A loud voice echos in your mind.  "You are without form. Your first order of business is to choose a race that you identify with. Use go race (such as go human).  Valid races are: Human, Elf, CreatureOfScience"  You may also use !help racename for more information on the races.
-BattleChance=0
 
 ; Exits
 ExitList=Human.Elf.CreatureOfScience
@@ -70,8 +69,8 @@ CreatureOfScienceAction=/.echo -q $setrace($1,ScienceCreation)
 
 
 ; Room Flags
-CanDig=false
 Shop=false
+ShopName=
 WarmthNeeded=-100
 UnderWater=false
 Inside=true
@@ -80,13 +79,13 @@ trees=0
 CanDig=false
 
 ; Room Items
-Items=
+items=
+
 
 
 [0:0:4]
 Name=The Void
 Desc="Very good $get.name($1) the $race($1) $+ .  Now you must choose a gender for yourself. Valid genders are male, female, or other"
-BattleChance=0
 
 ; Exits
 ExitList=male.female.other
@@ -102,12 +101,12 @@ OtherAction=/.echo -q $setgender($1, other)
 ; Room Flags
 CanDig=false
 Shop=false
+ShopName=
 WarmthNeeded=-100
 UnderWater=false
 Inside=true
 zone=void
 trees=0
-CanDig=false
 
 ; Room Items
 Items=
@@ -117,8 +116,7 @@ Items=
 
 [0:0:3]
 Name=The Void
-Desc=You have reached the end of the game as of 091614
-BattleChance=0
+Desc=You have reached the end of the game as of 091814
 
 ; Exits
 ExitList=
@@ -130,12 +128,15 @@ ExitList=
 ; Room Flags
 CanDig=false
 Shop=false
+ShopName=
 WarmthNeeded=-100
 UnderWater=false
 Inside=true
 zone=void
 trees=0
-CanDig=false
 
 ; Room Items
 Items=
+
+
+

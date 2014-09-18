@@ -30,7 +30,7 @@ clean_mainfolder {
   }
 }
 
-teleport {
+admin.teleport {
 
 
 }

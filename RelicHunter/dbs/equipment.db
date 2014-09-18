@@ -14,6 +14,7 @@ BODY
 
 [PrisonShirt]
 Name=Prison Shirt
+Type=Armor
 hp=0
 tp=0
 Str=0
@@ -25,7 +26,7 @@ EquipLocation=body
 cost=0
 SellPrice=1
 exclusive=true
-Type=Armor
+Warmth=1
 
 
 ========
@@ -34,6 +35,7 @@ LEGS
 
 [PrisonPants]
 Name=Prison Pants
+Type=Armor
 hp=0
 tp=0
 Str=0
@@ -45,8 +47,7 @@ EquipLocation=legs
 cost=0
 SellPrice=1
 exclusive=true
-Type=Armor
-
+Warmth=1
 
 ========
 FEET

@@ -101,13 +101,14 @@ Equipped=Fists
 Fists=1
 
 [Items]
+List=nothing
 Count=0
+
 
 [Skills]
 
 
 [Techniques]
-
 
 
 [equipment]
@@ -126,6 +127,7 @@ Version=1.0
 
 [Settings]
 ShowHunger=true
+ShowDigSpot=false
 
 
 [Flags]

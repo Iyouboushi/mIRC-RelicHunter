@@ -37,6 +37,7 @@ NewPassword=$chr(3) $+ 3 $+ Your new password has been set to $3 
 ViewMyHP=$chr(3) $+ 3 $+ Your HP is: $readini($char($nick), CurrentStats, HP) $chr(47) $readini($char($nick), BaseStats, HP)  $+ $chr(91) $+ %hstats $+ 3 $+ $chr(93) 
 ViewMyHunger=$chr(3) $+ 3 $+ Your Hunger is at: $readini($char($nick), CurrentStats, Hunger) $chr(47) 100
 ViewMyStamina=$chr(3) $+ 3 $+ Your Stamina is at: $readini($char($nick), CurrentStats, Stamina) $chr(47) 50
+ViewMyWarmth=$chr(3) $+ 3 $+ Your Warmth is at: $current.warmth($nick)
 Starving=$chr(3) $+ 4 $+ You are currently starving and will not regenerate HP naturally.  Find some food!
 ShowRace=$chr(3) $+ 3 $+ You are $race($nick) 
 ShowGender=$chr(3) $+ 3 $+ You are $get.gender($nick)
@@ -60,6 +61,11 @@ CurrentArmorHandsEquipped=Current Hand Armor
 ViewWeaponList=$chr(3) $+ 3 $+  $+ %real.name 
 DiggingAction=$chr(3) $+ 3 $+  $+ $get.name($1) begins digging %direction $+ !
 YouDigDirection=$chr(3) $+ 3 $+ You begin to dig %direction $+ !
+CanDigHere=$chr(3) $+ 5 $+ You can dig here with a pickaxe.
+ViewItems=$chr(3) $+ 3 $+ You are carrying the following items: %items.list 
+CarryingNoItems=$chr(3) $+ 3 $+ You are not carrying any items
+
+ 
 
 ViewMyMechHP=$chr(3) $+ 3 $+  $+ %real.name $+ 's %mech.name HP is: $readini($char($nick), Mech, HpCurrent) $chr(47) $readini($char($nick), Mech, HpMax)  $+ $chr(91) $+ %hstats $+ 3 $+ $chr(93) 
 ViewMyTP=$chr(3) $+ 3 $+  $+ %real.name $+ 's TP is: $readini($char($nick), CurrentStats, TP) $chr(47) $readini($char($nick), BaseStats, TP) 
@@ -90,7 +96,7 @@ ViewActiveSkills2=$chr(3) $+ 3 $+  $+ %active.skills.list2
 ViewResistanceSkills=$chr(3) $+ 3 $+  $+ %real.name has the following 12resistances3: %resists.skills.list 
 ViewKillerTraitSkills=$chr(3) $+ 3 $+  $+ %real.name has the following 12monster killer traits3: %killer.skills.list 
 HasNoSkills=$chr(3) $+ 3 $+  $+ %real.name currently knows no skills.
-ViewItems=$chr(3) $+ 3 $+  $+ %real.name has the following items: %items.list 
+
 ViewSummonItems=$chr(3) $+ 3 $+  $+ %real.name has the following summon items: %summons.items.list 
 ViewShopResetItems=$chr(3) $+ 3 $+  $+ %real.name has the following shop lowering items: %reset.items.list 
 ViewShopSpecialItems=$chr(3) $+ 3 $+  $+ %real.name has the following songsheet and special items: %special.items.list 
@@ -264,12 +270,15 @@ InventoryIsFull=$chr(3) $+ 4 $+ Your inventory is full.
 RoomDoesn'tHaveItem=$chr(3) $+ 4 $+ You do not see that item here in this room.
 DoNotHaveThatItem=$chr(3) $+ 4 $+ You do not have that item.
 ItemDoesNotExist=$chr(3) $+ 4 $+ SYSTEM ERROR: this item does not exist in the items.db. Please have the bot admin add it.
+RoomDoesNotExist=$chr(3) $+ 4 $+ SYSTEM ERROR: the room this exit leads to does not exist. Please have the bot admin add it.
 ItemIsExclusive=$chr(3) $+ 4 $+ This item cannot be dropped or traded.
 RoomIsFull=$chr(3) $+ 4 $+ You are unable to drop any more items into this room.
 CannotDigDirection=$chr(3) $+ 4 $+ You are unable to dig in that direction.
 DoNotHavePickaxe=$chr(3) $+ 4 $+ You do not have a pickaxe.
 DoNotHaveStamina=$chr(3) $+ 4 $+ You do not have enough stamina to do this.
 CannotDigHere=$chr(3) $+ 4 $+ You cannot dig here.
+TooColdToGoThere=$chr(3) $+ 4 $+ You are too cold to proceed $2 $+ .  Increase your warmth to continue on in that direction.
+CurrentlyInBattle=$chr(3) $+ 4 $+ You can not do this action while in battle!
 
 
 Can'tDualWield=$chr(3) $+ 4 $+ Error: %real.name does not have the necessary skill to dual wield.

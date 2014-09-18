@@ -1,0 +1,7 @@
+[stealpool]
+; While you may modify the first three lines in this list, please don't remove them
+monster=
+boss=
+
+; Add monsters/bosses and their steal pools below this line.
+
