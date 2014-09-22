@@ -136,7 +136,8 @@ zone=plains
 trees=0
 
 ; Room Items
-Items=
+Items=ScubaTank
+ScubaTank=1000
 
 
 [0:-1:-1]

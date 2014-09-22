@@ -20,7 +20,7 @@ do not remove or modify the Moon Phase section as it will cause
 errors.
 ==============================================================
 [MoonPhase]
-CurrentMoonPhase=New
+CurrentMoonPhase=Crescent
 CurrentMoonTurn=1
 
 [MoonPhaseTime]
@@ -38,8 +38,8 @@ remove or modify the time of day section as it will cause
 errors.
 ==============================================================
 [TimeOfDay]
-CurrentTimeOfDay=Evening
-CurrentTimeOfDayTurn=2
+CurrentTimeOfDay=Night
+CurrentTimeOfDayTurn=1
 
 [TimeOfDayTime]
 morning=2
