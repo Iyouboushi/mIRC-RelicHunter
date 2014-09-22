@@ -148,7 +148,14 @@ skill.increase {
   $dcc.private.message($1, $readini(translation.dat, system, IncreasedSkill))
 }
 
+skill.check {
+  ; $1 = person checking for skill
+  ; $2 = skill name
 
+  var %skill.level $readini($char($1), skills, $2)
+  if (%skill.level = $null) { var %skill.level 0 }
+  return %skill.level
+}
 
 
 
@@ -219,6 +226,12 @@ item.add {
     var %player.item.list $addtok(%player.item.list, $2, 46)
     writeini $char($1) items list %player.item.list
   }
+}
+
+accessory.type { 
+  var %accessory.name $readini($char($1), equipment, accessory)
+  if (%accessory.name = none) { return none }
+  else {  return $readini($dbfile(items.db), %accessory.name, type) }
 }
 
 inventory.count { return $readini($char($1), items, count) }
@@ -418,4 +431,56 @@ dig {
 
   ; Move the char.
   $go($1, %direction)
+}
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; The chop command
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+chop {
+  ; $1 = person chopping
+
+  ; Are you in battle? If so, you can't do this action
+  if ($in.battle($1) = true) {  $battle.look($1) | halt }
+
+  ; Does the person have a hatchet?
+  if ($item.count($1, Hatchet) = 0) { $dcc.private.message($1, $readini(translation.dat, errors, DoNotHaveHatchet))  | halt  }
+
+  ; Do we have stamina?
+  if ($current.stamina($1) < 5) { $dcc.private.message($1, $readini(translation.dat, errors, DoNotHaveStamina))  | halt  }
+
+  ; Does the room have trees to chop?
+  var %number.of.trees $room.treestotal($get.zone($1), $get.room($1))
+  if ((%number.of.trees = 0) || (%number.of.trees = $null)) { $dcc.private.message($1, $readini(translation.dat, errors, NoTreesHere)) | halt }
+
+  ; Decrease Stamina
+  writeini $char($1) currentstats stamina $calc($current.stamina($1) - 5) 
+
+  ; Show that we're chopping.
+  $announce.room.action($1, chopping)
+  $dcc.private.message($1, $readini(translation.dat, system, YouChopTree))
+
+  ; Decrease tree count
+  dec %number.of.trees 1
+  writeini $zone($get.zone($1)) $get.room($1) Trees %number.of.trees
+
+  ; Random chance of actually chopping down the tree and obtaining a log.
+  if ($rand(1,10) < 4) { $dcc.private.message($1, $readini(translation.dat, system, TreeDoesNotFall)) | halt }
+
+  ; Give a random reward.
+  $dcc.private.message($1, $readini(translation.dat, system, TreeFalls)) 
+
+  ; Get the item 
+  var %total.lines $lines($zonelogs($get.zone($1)))
+
+  if (%total.lines = 0) { return }
+  var %random.log $rand(1,%total.lines)
+  set %log.name $read -l $+ %random.log $zonelogs($get.zone($1))
+
+  ; First see if the player has inventory space.  If so, give the log to him/her.
+  if ($inventory.count($1) <= 14) { $item.add($1, %log.name) | $dcc.private.message($1, $readini(translation.dat, system, ObtainedALog)) | return }
+
+  ; Okay, so the player has full inventory.  Does the room have space?  If so, drop the item there.
+  if ($room.count.items($1) < 15) {  $dcc.private.message($1, $readini(translation.dat, system, TreeDroppedALog)) | $room.add.item($1, %log.name) | return }
+
+  ; If both are full, the item just disappears.
 }

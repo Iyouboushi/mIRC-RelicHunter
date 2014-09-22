@@ -167,8 +167,8 @@ on 2:Chat:!status*: {  unset %all_status
 on 2:Chat:!techs*: {
 }
 
-on 2:Chat:!skills*: {
-}
+on 2:Chat:!skills*: { $skills.list($nick) }
+on 2:Chat:skills: { $skills.list($nick) }
 
 on 2:Chat:!race: { $dcc.private.message($nick, $readini(translation.dat, system, showrace))  }
 on 2:Chat:!gender: { $dcc.private.message($nick, $readini(translation.dat, system, showgender))  }
@@ -197,10 +197,15 @@ on 2:Chat:!remove*: {
 on 2:Chat:!go*: { $go($nick, $2) }
 on 2:Chat:go*: { $go($nick, $2) }
 on 2:Chat:north: { $go($nick, north) }
+on 2:Chat:n: { $go($nick, north) }
 on 2:Chat:east: { $go($nick, east) }
+on 2:Chat:e: { $go($nick, east) }
 on 2:Chat:south: { $go($nick, south) }
+on 2:Chat:s: { $go($nick, south) }
 on 2:Chat:west: { $go($nick, west) }
+on 2:Chat:w: { $go($nick, west) }
 on 2:Chat:down: { $go($nick, down) }
+on 2:Chat:d: { $go($nick, down) }
 on 2:Chat:up: {  $go($nick, up) }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -216,6 +221,12 @@ on 2:Chat:dig *: {
   if ($istok(%valid.directions, $2, 46) = $true) { $dig($nick, $2) }
   else { $dcc.private.message($readini(translation.dat), errors, CannotDigDirection)) }
 }
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Chopping Command
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+on 2:Chat:!chop *: { $chop($nick) }
+on 2:Chat:chop *: { $chop($nick) }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Looking/room commands
