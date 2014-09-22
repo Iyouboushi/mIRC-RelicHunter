@@ -125,8 +125,14 @@ south
 west
 up
 down
+n
+e
+s
+w
+u
+d
 
-These all let you move through the world. For standard directions you can just type the name of the direction to go that way. For custom directions, such as when picking your race and class, you will need to use the !go or go command.
+These all let you move through the world. For standard directions you can just type the name of the direction to go that way, or the first letter of the direction. For custom directions, such as when picking your race and class, you will need to use the !go or go command.
 
 
 ;;;;;;;;;;;;;;;;;;;
@@ -137,6 +143,18 @@ Digging Command
 dig direction
 
 Once you have a pickaxe you can start digging to obtain ores. Only certain rooms allow digging, though once you're underground you can pretty much go anywhere you want.  Valid directions are: north, east, south, west, up and down.  Not all rooms allow you to dig in every direction.
+
+
+;;;;;;;;;;;;;;;;;;;
+Chopping Command
+;;;;;;;;;;;;;;;;;;;
+
+!chop tree
+chop tree
+
+Once you have a hatchet you can start chopping trees to receive wood logs. Only certain rooms allow chopping and the room will tell you how many trees are left that are available to chop.
+
+Note that when you chop there's a 30% chance that the tree will not fall. Trees that do not fall will not give items. Also note that if your inventory is full when you chop the tree down the item will be dropped into the room, if the room is not full (if the room is full then the item simply vanishes).
 
 
 ;;;;;;;;;;;;;;;;;;;
