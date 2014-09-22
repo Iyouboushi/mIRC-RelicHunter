@@ -198,17 +198,19 @@ item.remove {
   var %player.item.amount $item.count($1, $2)
   dec %player.item.amount 1
   if (%player.item.amount = 0) { remini $char($1) items $2 }
-  else {  writeini $char($1) items $2 %player.item.amount }
+  else { writeini $char($1) items $2 %player.item.amount }
 
   var %player.item.count $item.total.count($1, $2)
   dec %player.item.count 1
   writeini $char($1) items count %player.item.count
 
   ; Remove from the list
-  var %player.item.list $readini($char($1), items, list)
-  var %player.item.list $remtok(%player.item.list, $2, 46)
-  if (%player.item.list = $null) { writeini $char($1) items list nothing }
-  else { writeini $char($1) items list %player.item.list  }
+  if (%player.item.amount = 0) { 
+    var %player.item.list $readini($char($1), items, list)
+    var %player.item.list $remtok(%player.item.list, $2, 46)
+    if (%player.item.list = $null) { writeini $char($1) items list nothing }
+    else { writeini $char($1) items list %player.item.list  }
+  }
 }
 item.add {
   var %player.item.amount $item.count($1, $2)

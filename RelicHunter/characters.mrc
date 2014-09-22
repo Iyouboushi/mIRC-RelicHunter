@@ -206,7 +206,7 @@ on 2:Chat:west: { $go($nick, west) }
 on 2:Chat:w: { $go($nick, west) }
 on 2:Chat:down: { $go($nick, down) }
 on 2:Chat:d: { $go($nick, down) }
-on 2:Chat:up: {  $go($nick, up) }
+on 2:Chat:u: {  $go($nick, up) }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Digging Command
@@ -214,12 +214,12 @@ on 2:Chat:up: {  $go($nick, up) }
 on 2:Chat:!dig *: { 
   var %valid.directions n.north.e.east.s.south.w.west.u.up.d.down
   if ($istok(%valid.directions, $2, 46) = $true) { $dig($nick, $2) }
-  else { $dcc.private.message($readini(translation.dat), errors, CannotDigDirection)) }
+  else { $dcc.private.message($nick, $readini(translation.dat, errors, CannotDigDirection)) }
 }
 on 2:Chat:dig *: { 
   var %valid.directions n.north.e.east.s.south.w.west.u.up.d.down
   if ($istok(%valid.directions, $2, 46) = $true) { $dig($nick, $2) }
-  else { $dcc.private.message($readini(translation.dat), errors, CannotDigDirection)) }
+  else { $dcc.private.message($nick, $readini(translation.dat, errors, CannotDigDirection)) }
 }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
