@@ -128,10 +128,9 @@ Version=1.0
 [Settings]
 ShowHunger=true
 ShowDigSpot=false
-
+ShowPOS=false
+ShowWeather=true
 
 [Flags]
 TutorialComplete=false
 FreeStartingItems=false
-ShowPOS=false
-ShowWeather=true
