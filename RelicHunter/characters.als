@@ -44,7 +44,7 @@ setrace {
     writeini $char($1) basestats def 5
     writeini $char($1) basestats int 5
     writeini $char($1) basestats agi 5
-    writeini $char($1) basestats char 5
+    writeini $char($1) basestats chr 5
   }
 
   if ($2 = elf) {
@@ -54,7 +54,7 @@ setrace {
     writeini $char($1) basestats def 4
     writeini $char($1) basestats int 6
     writeini $char($1) basestats agi 6
-    writeini $char($1) basestats char 5
+    writeini $char($1) basestats chr 5
   }
 
   if ($2 = sciencecreation) {
@@ -64,7 +64,7 @@ setrace {
     writeini $char($1) basestats def 7
     writeini $char($1) basestats int 4
     writeini $char($1) basestats agi 4
-    writeini $char($1) basestats char 2
+    writeini $char($1) basestats chr 2
 
   }
 
@@ -75,7 +75,7 @@ setrace {
     writeini $char($1) basestats def 4
     writeini $char($1) basestats int 4
     writeini $char($1) basestats agi 8
-    writeini $char($1) basestats char 6
+    writeini $char($1) basestats chr 6
 
   }
 
@@ -89,12 +89,12 @@ get.level {
   var %def $readini($char($1), currentstats, def)
   var %int $readini($char($1), currentstats, int)
   var %agi $readini($char($1), currentstats, agi)
-  var %char $readini($char($1), currentstats, char)
+  var %chr $readini($char($1), currentstats, chr)
 
   var %level %str
   inc %level %def
   inc %level %int
-  inc %level %char
+  inc %level %chr
 
   var %level $round($calc(%level / 25), 1)
 
@@ -157,11 +157,72 @@ skill.check {
   return %skill.level
 }
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Wear commands
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+wear.accessory {
+  ; $1 = the person equipping
+  ; $2 = the item
 
+  ; Are you in battle? If so, you can't do this action
+  if ($in.battle($1) = true) { $dcc.private.message($1, $readini(translation.dat, errors, Can'tDoThisInBattle)) | halt }
 
-weapon.equipped {  
+  ; Does the person have the item?
+  if ($item.count($1, $2) = 0) { $dcc.private.message($1, $readini(translation.dat, errors, DoNotHaveThat Item))  | halt  }
+
+  ; Are you already wearing something there?
+  if ($readini($char($1), equipment, accessory) != none) { $dcc.private.message($1, $readini(translation.dat, errors, AlreadyWearingArmorThere)) | halt }
+
+  ; Level requirement?
+  var %armor.level.requirement $readini($dbfile(equipment.db), $2, LevelRequirement)
+  if (%armor.level.requirement = $null) { var %armor.level.requirement 0 }
+  if ($round($get.level($1),0) < %armor.level.requirement) { $dcc.private.message($1, $readini(translation.dat, errors, ArmorLevelHigher)) | halt }
+
+  ; Increase stats, if necessary
+  $armor.addstats($1, $2)
+
+  ; Equip the accessory
+  writeini $char($1) equipment accessory $2
+  $dcc.private.message($1, $readini(translation.dat, system, EquippedAccessory))
 }
 
+wear.armor { }
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Remove commands
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+remove.accessory {
+  ; $1 = person 
+  ; $2 = accessory
+
+  ; Are you in battle? If so, you can't do this action
+  if ($in.battle($1) = true) { $dcc.private.message($1, $readini(translation.dat, errors, Can'tDoThisInBattle)) | halt }
+
+  ; Are you wearing this item?
+  var %equipped.accessory $readini($char($1), equipment, accessory)
+  if ($2 != %equipped.accessory) { $dcc.private.message($1, $readini(translation.dat, system, NotWearingThatAccessory))  | halt }
+
+  ; Decrease stats, if necessary
+  $armor.removestats($1, $2)
+
+  writeini $char($1) equipment accessory none 
+  $dcc.private.message($1, $readini(translation.dat, system, RemovedAccessory))
+}
+
+remove.armor { }
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Equip commands
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+weapon.equipped {  }
+equip.weapon { }
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Look commands
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 look.target {
   $weapon.equipped($1) | $set_chr_name($1)
   var %equipped.accessory $readini($char($1), equipment, accessory) 
@@ -183,9 +244,12 @@ look.target {
   $dcc.private.message($nick, %look.message) 
 } 
 
-look.object {
-}
+look.object { }
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Item commands
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 item.count {
   var %item.count $readini($char($1), items, $2) 
   if (%item.count = $null) { var %item.count 0 }
@@ -228,12 +292,6 @@ item.add {
     var %player.item.list $addtok(%player.item.list, $2, 46)
     writeini $char($1) items list %player.item.list
   }
-}
-
-accessory.type { 
-  var %accessory.name $readini($char($1), equipment, accessory)
-  if (%accessory.name = none) { return none }
-  else {  return $readini($dbfile(items.db), %accessory.name, type) }
 }
 
 inventory.count { return $readini($char($1), items, count) }
@@ -280,7 +338,6 @@ inventory.builditemslist {
 
   set %items.list %new.item.list
   unset %new.item.list
-
 }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -351,7 +408,7 @@ player.take.item {
 dig {
 
   ; Are you in battle? If so, you can't do this action
-  if ($in.battle($1) = true) {  $battle.look($1) | halt }
+  if ($in.battle($1) = true) { $dcc.private.message($1, $readini(translation.dat, errors, Can'tDoThisInBattle)) | halt }
 
   ; Do we have a pickaxe?
   if ($item.count($1, Pickaxe) = 0) { $dcc.private.message($1, $readini(translation.dat, errors, DoNotHavePickaxe))  | halt  }
@@ -442,7 +499,7 @@ chop {
   ; $1 = person chopping
 
   ; Are you in battle? If so, you can't do this action
-  if ($in.battle($1) = true) {  $battle.look($1) | halt }
+  if ($in.battle($1) = true) { $dcc.private.message($1, $readini(translation.dat, errors, Can'tDoThisInBattle)) | halt }
 
   ; Does the person have a hatchet?
   if ($item.count($1, Hatchet) = 0) { $dcc.private.message($1, $readini(translation.dat, errors, DoNotHaveHatchet))  | halt  }

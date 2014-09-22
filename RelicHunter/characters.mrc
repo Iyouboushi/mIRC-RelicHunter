@@ -186,9 +186,35 @@ on 2:Chat:!unequip*: {
 }
 
 on 2:Chat:!wear*: { 
+  var %item.type $readini($dbfile(equipment.db), $2, type)
+
+  if (%item.type = accessory) { $wear.accessory($nick, $2) }
+  if (%item.type = armor) { $wear.armor($nick, $2) }
+
+  if ((%item.type != accessory) && (%item.type != armor)) { $dcc.private.message($nick, $readini(translation.dat, errors, Can'tWearThat)) | halt }
+}
+
+on 2:Chat:wear *: { 
+  var %item.type $readini($dbfile(equipment.db), $2, type)
+
+  if (%item.type = accessory) { $wear.accessory($nick, $2) }
+  if (%item.type = armor) { $wear.armor($nick, $2) }
+
+  if ((%item.type != accessory) && (%item.type != armor)) { $dcc.private.message($nick, $readini(translation.dat, errors, Can'tWearThat)) | halt }
 }
 
 on 2:Chat:!remove*: { 
+  var %item.type $readini($dbfile(equipment.db), $2, type)
+  if (%item.type = accessory) { $remove.accessory($nick, $2) }
+  if (%item.type = armor) { $remove.armor($nick, $2) }
+  if ((%item.type != accessory) && (%item.type != armor)) { $dcc.private.message($nick, $readini(translation.dat, errors, Can'tRemoveThat)) | halt }
+}
+
+on 2:Chat:remove *: { 
+  var %item.type $readini($dbfile(equipment.db), $2, type)
+  if (%item.type = accessory) { $remove.accessory($nick, $2) }
+  if (%item.type = armor) { $remove.armor($nick, $2) }
+  if ((%item.type != accessory) && (%item.type != armor)) { $dcc.private.message($nick, $readini(translation.dat, errors, Can'tRemoveThat)) | halt }
 }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -294,8 +320,10 @@ on 2:Chat:!items: { $inventory($nick, all) }
 on 2:Chat:items: { $inventory($nick, all) }
 on 2:Chat:!inventory*: { $inventory($nick, all) }
 on 2:Chat:inventory: { $inventory($nick, all) }
+on 2:Chat:i: { $inventory($nick, all) }
 on 2:Chat:!keys*: { $inventory($nick, keys) }
 on 2:Chat:!accessories*: { $inventory($nick, accessories) } 
+on 2:Chat:accessories*: { $inventory($nick, accessories) } 
 
 on 2:Chat:!drop*: {  
   ; Attempt to drop an item from inventory to the room.
