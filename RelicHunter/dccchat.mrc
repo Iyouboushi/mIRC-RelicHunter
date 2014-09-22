@@ -13,13 +13,13 @@ on 2:open:=: {
 
   while ($chat(%p) != $null) { 
     if ($chat(%p) == $nick) { inc %p 1 }
-    else {  msg = $+ $chat(%p) 14###4 $nick has entered the universe on planet %where $+ . | inc %p 1 }
+    else {  msg = $+ $chat(%p) 14###4 $nick has entered the universe in %where $+ . | inc %p 1 }
   }
 
   $dcc.who'sonline($nick)
 
 
-  if ($readini($char($nick), currentStats, InBattle) = false) { $look.room($nick) }
+  if ($readini($char($nick), CurrentStats, InBattle) != true) { $room.look($nick) }
   else { 
     ; Resume battle
   }
@@ -99,11 +99,8 @@ alias dcc.status.messages {
 alias dcc.private.message {
   ; $1 = person
   ; $2 = message
-  var %p 1
-  while ($chat(%p) != $null) {  var %nick $chat(%p)
-    if ($chat(%p) = $1) { msg = $+ $chat(%p) $2 }
-    inc %p 1 
-  } 
+  if ($2 = $null) { echo -a 4ERROR: MESSAGE IS NULL, CHECK TRANSLATION.DAT | halt }
+  msg = $+ $1 $2
 }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
