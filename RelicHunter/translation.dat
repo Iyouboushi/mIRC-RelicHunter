@@ -78,6 +78,8 @@ ViewActiveSkills2=$chr(3) $+ 3 $+  $+ %active.skills.list2
 ViewResistanceSkills=$chr(3) $+ 3 $+ You have the following 12resistances3: %resists.skills.list 
 ViewKillerTraitSkills=$chr(3) $+ 3 $+ You have the following 12monster killer traits3: %killer.skills.list 
 HaveNoSkills=$chr(3) $+ 3 $+ You know no skills..
+EquippedAccessory=$chr(3) $+ 3 $+ You have equipped the accessory $2
+RemovedAccessory=$chr(3) $+ 3 $+ You have removed the accessory $2
 
 
 
@@ -155,8 +157,7 @@ PlayersMustDieModeOn=$chr(3) $+ 4 $+ The Players Must Die Mode has been turned
 PlayersMustDieModeOff=$chr(3) $+ 4 $+ The Players Must Die Mode has been turned off.
 AllowColorsOn=$chr(3) $+ 4 $+ The Bot's Colors have been turned on.
 AllowColorsOff=$chr(3) $+ 4 $+ The Bot's Colors have been turned off.
-EquippedAccessory=$chr(3) $+ 3 $+  $+ %real.name has equipped the accessory $2
-RemovedAccessory=$chr(3) $+ 3 $+  $+ %real.name has removed the accessory $2
+
 EquippedArmor=$chr(3) $+ 3 $+  $+ %real.name is now wearing the $readini($dbfile(equipment.db), $2, name)
 RemovedArmor=$chr(3) $+ 3 $+  $+ %real.name has removed the $readini($dbfile(equipment.db), $2, name)
 NotWearingThatAccessory=$chr(3) $+ 3 $+  $+ %real.name is not wearing the $2 accessory.
@@ -290,6 +291,11 @@ TooColdToGoThere=$chr(3) $+ 4 $+ You are too cold to proceed $2 $+ .  Increase y
 CurrentlyInBattle=$chr(3) $+ 4 $+ You can not do this action while in battle!
 NoTreesHere=$chr(3) $+ 4 $+ You do not see any trees here.
 Can'tSwim=$chr(3) $+ 4 $+ You can not go any further without drowning.
+Can'tWearThat=$chr(3) $+ 4 $+ You cannot wear this item.
+Can'tRemoveThat=$chr(3) $+ 4 $+ You cannot remove this item since you cannot equip this item type.
+ArmorLevelHigher=$chr(3) $+ 4 $+ You cannot wear this yet as the armor level is $bytes(%armor.level.requirement,b) but your level is only level $bytes($round($get.level($1),0),b)
+Can'tDoThisInBattle=$chr(3) $+ 4 $+ You're unable to do this while in battle.
+AlreadyWearingArmorThere=$chr(3) $+ 4 $+ You are already wearing something in that equipment slot! Remove it first.
 
 
 Can'tDualWield=$chr(3) $+ 4 $+ Error: %real.name does not have the necessary skill to dual wield.
@@ -305,7 +311,6 @@ NoScriptsWithCommands=$chr(3) $+ 4 $+ Error: You cannot build scripts with you
 NotInDataBank=$chr(3) $+ 4 $+ Error: $1 isn't in my data banks!
 NoCurrentBattle=$chr(3) $+ 4 $+ Error: There is no current battle
 WaitYourTurn=$chr(3) $+ 4 $+ Error: $1 wait for your turn!
-Can'tDoThisInBattle=$chr(3) $+ 4 $+ Error: This command only works outside of battle.
 NotInBattle=$chr(3) $+ 4 $+ Error: $1 is not currently in this battle!
 CanNotEnterDueToBattleThrottle=$chr(3) $+ 4 $+ Error: $1 is not able to enter this battle due to a battle throttle. Please enter the next battle.
 NoMonsAvailable=$chr(3) $+ 4 $+ Error: There are no monsters in the monster folder.. Have the bot admin check to make sure there are monsters for players to battle! 
@@ -369,7 +374,7 @@ DoNotHaveArmorToSell=$chr(3) $+ 4 $+ Error: You do not have this armor piece t
 DoNotHaveEnoughItemToSell=$chr(3) $+ 4 $+ Error: You do not have $4 of this item to sell!
 StillWearingAccessory=$chr(3) $+ 4 $+ Error: You can't sell this accessory because you're still wearing it! 
 StillWearingArmor=$chr(3) $+ 4 $+ Error: You can't sell this piece of armor because you're still wearing it!
-AlreadyWearingArmorThere=$chr(3) $+ 4 $+ Error: You are already wearing something in that equipment slot! Remove it first.
+
 ItemUseCommandError=$chr(3) $+ 4 $+ Error: !use <item> ON <person> 
 Can'tBuy0ofThat=$chr(3) $+ 4 $+ Error: You can't buy 0 of that! 
 Can'tSellThat=$chr(3) $+ 4 $+ Error: You can only sell items, accessories and techniques
@@ -459,7 +464,6 @@ AHNotMinBid=$chr(3) $+ 4 $+ Error: You must bid at least %minimum.bid allied 
 AlreadyPlacedBid=$chr(3) $+ 4 $+ Error: You have already placed a bid for this item.
 NotEnoughNotesToBid=$chr(3) $+ 4 $+ Error: You do not have $2 allied notes.
 MechsNotAllowed=$chr(3) $+ 4 $+ Error: The use of mechs is currently disabled via a system setting.
-ArmorLevelHigher=$chr(3) $+ 4 $+ Error: %real.name cannot wear this armor yet as the armor level is $bytes(%armor.level.requirement,b) but %real.name is only level $bytes($round($get.level($1),0),b)
 MaxPortalItemsAllowed=$chr(3) $+ 4 $+ Error: %real.name has already used the maximum amount of portal items allowed in a 24 hour period. 
 CannotGiveItem=$chr(3) $+ 4 $+ Error: This item is exclusive to %real.name and cannot be traded to others.
 CannotUseItemOnSomeoneElse=$chr(3) $+ 4 $+ Error: This item is exclusive to %real.name and cannot be used on anyone else.

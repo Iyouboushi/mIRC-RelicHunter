@@ -1,4 +1,4 @@
-game.version { return 1.0beta_091814 } 
+game.version { return 1.0beta_092114 } 
 system.dat.version { return 091314 }
 quitmsg { return Relic Hunter Bot version $game.version written by James  "Iyouboushi" }
 system_defaults_check {
@@ -202,37 +202,6 @@ display.system.message {
     if ($2 = global) { $dcc.global.message(%message.to.display) }
   }
 }
-display.system.message.delay {
-  ; $1 = the message
-  ; $2 = is a flag for the DCCchat option to determine where it sends the message
-  ; $3 = delay
-
-  var %message.to.display $1
-  if ($allowcolors = false) { var %message.to.display $strip(%message.to.display, c) }
-
-  var %delay.time $3
-  if (%delay.time = $null) { var %delay.time 1 }
-
-  if ($readini(system.dat, system, botType) = IRC) { 
-    /.timerThrottleDisplayMessage $+ $2 $+ $rand(1,100) $+ $rand(a,z) $+ $rand(1,1000) 1 %delay.time /query %battlechan %message.to.display
-  }
-
-  if ($readini(system.dat, system, botType) = TWITCH) { 
-    var %twitch.delay $readini(system.dat, system, TwitchDelayTime)
-    if (%twitch.delay = $null) { var %twitch.delay 2 }
-    inc %delay.time %twitch.delay
-    /.timerThrottleDisplayMessage $+ $2 $+ $rand(1,100) $+ $rand(a,z) $+ $rand(1,1000) 1 %delay.time /query %battlechan %message.to.display
-  }
-
-  if ($readini(system.dat, system, botType) = DCCchat) { 
-    if ((%battle.type = ai) && ($2 = battle)) { $dcc.global.message(%message.to.display) | return } 
-
-    if ($2 = private) { $dcc.private.message($nick, %message.to.display) }
-    if ($2 = battle) { $dcc.battle.message(%message.to.display) }
-    if ($2 = $null) { $dcc.global.message(%message.to.display) }
-    if ($2 = global) { $dcc.global.message(%message.to.display) }
-  }
-}
 
 display.private.message {
   var %message.to.display $1
@@ -243,47 +212,6 @@ display.private.message {
   if ($2 != privatemessage) {  $dcc.private.message($nick, %message.to.display) }
 }
 
-display.private.message2 {
-  var %message.to.display $2
-
-  if ($allowcolors = false) { var %message.to.display $strip(%message.to.display, c) }
-
-  if ($2 = privatemessage) {   /.timerDisplayPM $+ $rand(1,1000) $+ $rand(a,z) $+ $rand(1,1000) 1 1 /.msg $1 %message.to.display   }
-  if ($2 != privatemessage) {  $dcc.private.message($1, %message.to.display) }
-}
-display.private.message.delay {
-  var %message.to.display $1
-  if ($allowcolors = false) { var %message.to.display $strip(%message.to.display, c) }
-
-  if ($readini(system.dat, system, botType) = IRC) {
-    /.timerDisplayPM $+ $rand(1,1000) $+ $rand(a,z) $+ $rand(1,1000) 1 2 /.msg $nick %message.to.display 
-  }
-  if ($readini(system.dat, system, botType) = DCCchat) { $dcc.private.message($nick, %message.to.display) }
-
-  if ($readini(system.dat, system, botType) = TWITCH) { 
-    var %twitch.delay $readini(system.dat, system, TwitchDelayTime)
-    if (%twitch.delay = $null) { var %twitch.delay 2 }
-    inc %twitch.delay 1 
-    /.timerDisplayPM $+ $rand(1,1000) $+ $rand(a,z) $+ $rand(1,1000) 1 %twitch.delay /query %battlechan %message.to.display
-  }
-}
-display.private.message.delay.custom {
-  var %message.to.display $1
-  if ($allowcolors = false) { var %message.to.display $strip(%message.to.display, c) }
-
-  if ($readini(system.dat, system, botType) = IRC) {
-    /.timerDisplayPM $+ $rand(1,1000) $+ $rand(a,z) $+ $rand(1,1000) 1 $2 /.msg $nick %message.to.display 
-  }
-  if ($readini(system.dat, system, botType) = DCCchat) { $dcc.private.message($nick, %message.to.display) }
-
-  if ($readini(system.dat, system, botType) = TWITCH) { 
-    var %twitch.delay $readini(system.dat, system, TwitchDelayTime)
-    if (%twitch.delay = $null) { var %twitch.delay 2 }
-    inc %twitch.delay $2
-    /.timerDisplayPM $+ $rand(1,1000) $+ $rand(a,z) $+ $rand(1,1000) 1 %twitch.delay /query %battlechan %message.to.display
-  }
-
-}
 
 announce.room.action {
 
@@ -439,8 +367,83 @@ skills_message_check {
 }
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Return an accessory type
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+accessory.type { 
+  var %accessory.name $readini($char($1), equipment, accessory)
+  if (%accessory.name = none) { return none }
+  else {  return $readini($dbfile(equipment.db), %accessory.name, accessoryType) }
+}
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Change stats by equipping
+; and removing armor
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+armor.addstats {
+  ; $1 = person
+  ; $2 = armor
+
+  ; Increase the stats
+  var %hp $round($calc($readini($char($1), Basestats, hp) + $readini($dbfile(equipment.db), $2, hp)),0)
+  var %tp $round($calc($readini($char($1), Basestats, tp) + $readini($dbfile(equipment.db), $2, tp)),0)
+  var %str $round($calc($readini($char($1), Basestats, Str)  + $readini($dbfile(equipment.db), $2, str)),0)
+  var %def $round($calc($readini($char($1), Basestats, def)  + $readini($dbfile(equipment.db), $2, def)),0)
+  var %int $round($calc($readini($char($1), Basestats, int) + $readini($dbfile(equipment.db), $2, int)),0)
+  var %agi $round($calc($readini($char($1), Basestats, agi)  + $readini($dbfile(equipment.db), $2, agi)),0)
+  var %char $round($calc($readini($char($1), Basestats, chr)  + $readini($dbfile(equipment.db), $2, chr)),0)
+  var %warmth $round($calc($readini($char($1), CurrentStats, warmth)  + $readini($dbfile(equipment.db), $2, warmth)),0)
+
+  writeini $char($1) Basestats Hp %hp
+  writeini $char($1) Basestats Tp %tp
+  writeini $char($1) Basestats Str %str
+  writeini $char($1) Basestats Def %def
+  writeini $char($1) Basestats Int %int
+  writeini $char($1) Basestats Agi %agi
+  writeini $char($1) Basestats Chr %char
+
+  writeini $char($1) CurrentStats Str %str
+  writeini $char($1) CurrentStats Def %def
+  writeini $char($1) CurrentStats Int %int
+  writeini $char($1) CurrentStats Agi %agi
+  writeini $char($1) CurrentStats Chr %char
+  writeini $char($1) CurrentStats Warmth %warmth
+}
+
+armor.removestats {
+  ; Decrease the stats
+  var %hp $round($calc($readini($char($1), Basestats, hp) - $readini($dbfile(equipment.db), $2, hp)),0)
+  var %tp $round($calc($readini($char($1), Basestats, tp) - $readini($dbfile(equipment.db), $2, tp)),0)
+  var %str $round($calc($readini($char($1), Basestats, Str)  - $readini($dbfile(equipment.db), $2, str)),0)
+  var %def $round($calc($readini($char($1), Basestats, def)  - $readini($dbfile(equipment.db), $2, def)),0)
+  var %int $round($calc($readini($char($1), Basestats, int) - $readini($dbfile(equipment.db), $2, int)),0)
+  var %agi $round($calc($readini($char($1), Basestats, agi)  - $readini($dbfile(equipment.db), $2, agi)),0)
+  var %char $round($calc($readini($char($1), Basestats, chr)  - $readini($dbfile(equipment.db), $2, chr)),0)
+  var %warmth $round($calc($readini($char($1), CurrentStats, warmth)  - $readini($dbfile(equipment.db), $2, warmth)),0)
+
+  writeini $char($1) Basestats Hp %hp
+  writeini $char($1) Basestats Tp %tp
+  writeini $char($1) Basestats Str %str
+  writeini $char($1) Basestats Def %def
+  writeini $char($1) Basestats Int %int
+  writeini $char($1) Basestats Agi %agi
+  writeini $char($1) Basestats Chr %char
+
+  writeini $char($1) CurrentStats Str %str
+  writeini $char($1) CurrentStats Def %def
+  writeini $char($1) CurrentStats Int %int
+  writeini $char($1) CurrentStats Agi %agi
+  writeini $char($1) CurrentStats Chr %char
+  writeini $char($1) CurrentStats Warmth %warmth
+}
 
 
+
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;Below this is all old BA stuff
 ;needs to be changed/edited/removed
