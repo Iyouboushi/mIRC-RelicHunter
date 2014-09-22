@@ -1,6 +1,6 @@
 [info]
 Name=Testing
-NumberOfRooms=10
+NumberOfRooms=8
 Active=true
 CanModify=no
 GameDays=2
@@ -20,8 +20,8 @@ do not remove or modify the Moon Phase section as it will cause
 errors.
 ==============================================================
 [MoonPhase]
-CurrentMoonPhase=Full
-CurrentMoonTurn=1
+CurrentMoonPhase=Crescent
+CurrentMoonTurn=2
 
 [MoonPhaseTime]
 full=10
@@ -39,7 +39,7 @@ errors.
 ==============================================================
 [TimeOfDay]
 CurrentTimeOfDay=Noon
-CurrentTimeOfDayTurn=3
+CurrentTimeOfDayTurn=4
 
 [TimeOfDayTime]
 morning=2
@@ -62,7 +62,7 @@ UnderWater=false
 Inside=false
 Trees=1000
 CanDig=true
-
+zone=plains
 
 
 
@@ -71,8 +71,9 @@ Name=The Flat World
 Desc=You are standing in a rather large field.  $iif($readini($zone($get.zone($1)), $get.room($1), trees) > 0, You can see some trees scattered about)
 
 ; Exits
-ExitList=east.down.west
+ExitList=east.south
 east=1:0:0
+south=0:-1:0
 
 
 ; Room Flags
@@ -81,17 +82,14 @@ ShopName=
 WarmthNeeded=0
 UnderWater=false
 Inside=false
-zone=void
+zone=plains
 trees=1000
 CanDig=true
 
 ; Room Items
-items=Pickaxe
+items=Pickaxe.Hatchet
 Pickaxe=1000
-down=0:0:-1
-west=-1:0:0
-
-
+Hatchet=1000
 
 
 [1:0:0]
@@ -99,7 +97,7 @@ Name=The Flat World
 Desc=You are standing in a rather large field.  $iif($readini($zone($get.zone($1)), $get.room($1), trees) > 0, You can see some trees scattered about)
 
 ; Exits
-ExitList=west.down.east
+ExitList=west
 West=0:0:0
 
 
@@ -110,117 +108,150 @@ ShopName=
 WarmthNeeded=0
 UnderWater=false
 Inside=false
-zone=void
+zone=plains
 trees=1600
 
 ; Room Items
 Items=
-down=1:0:-1
-east=2:0:0
 
 
-[0:0:-1]
-Name=Dark Tunnel
-Desc=A dark tunnel created by Iyouboushi
-zone=tunnel
-shop=false
-warmthNeeded=2
-underwater=false
-inside=true
-trees=0
-CanDig=true
-ExitList=up.east.west
-up=0:0:0
-east=1:0:-1
-west=-1:0:-1
-[1:0:-1]
-Name=Dark Tunnel
-Desc=A dark tunnel created by Iyouboushi
-zone=tunnel
-shop=false
-warmthNeeded=2
-underwater=false
-inside=true
-trees=0
-CanDig=true
-ExitList=west.east.up
-west=0:0:-1
-east=2:0:-1
-up=1:0:0
-[2:0:-1]
-Name=Dark Tunnel
-Desc=A dark tunnel created by Iyouboushi
-zone=tunnel
-shop=false
-warmthNeeded=2
-underwater=false
-inside=true
-trees=0
-CanDig=true
-ExitList=west.up.east
-west=1:0:-1
-up=2:0:0
-east=3:0:-1
-[2:0:0]
-Name=The Flat World
-Desc=You are standing in a rather large field.
+[0:-1:0]
+Name=Crystal Lake
+Desc=You are standing at the bank of Crystal Lake. The water is nice and blue.
+
+; Exits
+ExitList=north.down
+north=0:0:0
+down=0:-1:-1
+
+
+; Room Flags
+CanDig=false
 Shop=false
+ShopName=
 WarmthNeeded=0
 UnderWater=false
 Inside=false
-Trees=1000
-CanDig=true
-ExitList=west.down.east
-west=1:0:0
-down=2:0:-1
-east=3:0:0
-[3:0:-1]
-Name=Dark Tunnel
-Desc=A dark tunnel created by Iyouboushi
-zone=tunnel
-shop=false
-warmthNeeded=2
-underwater=false
-inside=true
+zone=plains
 trees=0
-CanDig=true
-ExitList=west.up
-west=2:0:-1
-up=3:0:0
-[3:0:0]
-Name=The Flat World
-Desc=You are standing in a rather large field.
+
+; Room Items
+Items=
+
+
+[0:-1:-1]
+Name=Crystal Lake
+Desc=You are standing waist-deep in Crystal Lake. The water is cold, but refreshing.
+
+; Exits
+ExitList=up.down
+up=0:-1:0
+down=0:-1:-2
+
+
+; Room Flags
+CanDig=false
 Shop=false
-WarmthNeeded=0
+ShopName=
+WarmthNeeded=5
 UnderWater=false
 Inside=false
-Trees=1000
-CanDig=true
-ExitList=west.down
-west=2:0:0
-down=3:0:-1
-[-1:0:-1]
-Name=Dark Tunnel
-Desc=A dark tunnel created by Iyouboushi
-zone=tunnel
-shop=false
-warmthNeeded=2
-underwater=false
-inside=true
+zone=lake
 trees=0
-CanDig=true
-ExitList=east.up
-east=0:0:-1
-up=-1:0:0
-[-1:0:0]
-Name=The Flat World
-Desc=You are standing in a rather large field.
+
+; Room Items
+Items=
+
+
+
+[0:-1:-2]
+Name=Swimming in Crystal Lake
+Desc=You are swimming in Crystal Lake. 
+
+; Exits
+ExitList=up.east.west.down
+up=0:-1:-1
+down=0:-1:-3
+east=1:-1:-2
+west=-1:-1:-2
+
+
+; Room Flags
+CanDig=false
 Shop=false
-WarmthNeeded=0
-UnderWater=false
+ShopName=
+WarmthNeeded=7
+UnderWater=true
 Inside=false
-Trees=1000
-CanDig=true
-ExitList=east.down
-east=0:0:0
-down=-1:0:-1
+zone=lake
+trees=0
+
+; Room Items
+Items=
+
+
+[1:-1:-2]
+Name=Swimming in Crystal Lake
+Desc=You are swimming in Crystal Lake. 
+
+; Exits
+ExitList=west
+west=0:-1:-2
+
+
+; Room Flags
+CanDig=false
+Shop=false
+ShopName=
+WarmthNeeded=7
+UnderWater=true
+Inside=false
+zone=lake
+trees=0
+
+; Room Items
+Items=
+
+[-1:-1:-2]
+Name=Swimming in Crystal Lake
+Desc=You are swimming in Crystal Lake. 
+
+; Exits
+ExitList=east
+east=0:-1:-2
+
+
+; Room Flags
+CanDig=false
+Shop=false
+ShopName=
+WarmthNeeded=7
+UnderWater=true
+Inside=false
+zone=lake
+trees=0
+
+; Room Items
+Items=
+
+[0:-1:-3]
+Name=Swimming in Crystal Lake
+Desc=You are on the bank of Crystal Lake. 
+
+; Exits
+ExitList=up
+up=0:-1:-2
+
+
+; Room Flags
+CanDig=false
+Shop=false
+ShopName=
+WarmthNeeded=10
+UnderWater=true
+Inside=false
+zone=lake
+trees=0
+
+; Room Items
+Items=

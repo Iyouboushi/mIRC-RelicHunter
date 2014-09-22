@@ -3,7 +3,7 @@ Name=Tutorial
 NumberOfRooms=3
 Active=true
 CanModify=no
-GameDays=1
+GameDays=6
 
 
 ==============================================================
@@ -20,7 +20,7 @@ do not remove or modify the Moon Phase section as it will cause
 errors.
 ==============================================================
 [MoonPhase]
-CurrentMoonPhase=Crescent
+CurrentMoonPhase=New
 CurrentMoonTurn=1
 
 [MoonPhaseTime]
@@ -38,7 +38,7 @@ remove or modify the time of day section as it will cause
 errors.
 ==============================================================
 [TimeOfDay]
-CurrentTimeOfDay=Morning
+CurrentTimeOfDay=Evening
 CurrentTimeOfDayTurn=2
 
 [TimeOfDayTime]
@@ -64,7 +64,6 @@ Trees=0
 CanDig=false
 
 
-
 [0:0:5]
 Name=The Void
 Desc=You open your eyes and find yourself in a bright white area. A loud voice echos in your mind.  "You are without form. Your first order of business is to choose a race that you identify with. Use go race (such as go human).  Valid races are: Human, Elf, CreatureOfScience"  You may also use !help racename for more information on the races.
@@ -77,8 +76,8 @@ CreatureOfScience=0:0:4
 
 ; Exit Actions
 HumanAction=/.echo -q $setrace($1,Human)
-ElfAction=/.echo -q $setrace($1,Elf)
-CreatureOfScienceAction=/.echo -q $setrace($1,ScienceCreation)
+ElfAction=/.echo -q $setrace($1,Elf) | $skill.add($1, NightVision, 1)
+CreatureOfScienceAction=/.echo -q $setrace($1,ScienceCreation) | $skill.add($1, WaterBreathing, 1)
 
 
 ; Room Flags
@@ -125,15 +124,18 @@ trees=0
 Items=
 
 
+
+
 [0:0:3]
 Name=The Void
-Desc=You have reached the end of the game as of 091814
+Desc=You have reached the end of the game as of 091814.  If you still want to play around and test, go DOWN one more time.
 
 ; Exits
-ExitList=
-
+ExitList=down
+down=0:0:0
 
 ; Exit Actions
+downAction=$changezone($1, test) | writeini $char($1) currentstats warmth 100 | $dcc.private.message($1, 7* Your warmth has been increased to 100 for this test.)
 
 
 ; Room Flags

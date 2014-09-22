@@ -3,7 +3,7 @@ Name=Tutorial
 NumberOfRooms=3
 Active=true
 CanModify=no
-GameDays=3
+GameDays=6
 
 
 ==============================================================
@@ -20,7 +20,7 @@ do not remove or modify the Moon Phase section as it will cause
 errors.
 ==============================================================
 [MoonPhase]
-CurrentMoonPhase=Quarter
+CurrentMoonPhase=New
 CurrentMoonTurn=1
 
 [MoonPhaseTime]
@@ -38,8 +38,8 @@ remove or modify the time of day section as it will cause
 errors.
 ==============================================================
 [TimeOfDay]
-CurrentTimeOfDay=Noon
-CurrentTimeOfDayTurn=1
+CurrentTimeOfDay=Evening
+CurrentTimeOfDayTurn=2
 
 [TimeOfDayTime]
 morning=2
@@ -76,8 +76,8 @@ CreatureOfScience=0:0:4
 
 ; Exit Actions
 HumanAction=/.echo -q $setrace($1,Human)
-ElfAction=/.echo -q $setrace($1,Elf)
-CreatureOfScienceAction=/.echo -q $setrace($1,ScienceCreation)
+ElfAction=/.echo -q $setrace($1,Elf) | $skill.add($1, NightVision, 1)
+CreatureOfScienceAction=/.echo -q $setrace($1,ScienceCreation) | $skill.add($1, WaterBreathing, 1)
 
 
 ; Room Flags

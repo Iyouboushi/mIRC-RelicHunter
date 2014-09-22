@@ -1,6 +1,6 @@
 [info]
 Name=Testing
-NumberOfRooms=2
+NumberOfRooms=8
 Active=true
 CanModify=no
 GameDays=2
@@ -10,7 +10,7 @@ GameDays=2
 The weather is controlled in this file for the entire zone.
 ==============================================================
 [weather]
-current=calm
+current=gloomy
 list=calm.gloomy
 boost=.25
 
@@ -20,8 +20,8 @@ do not remove or modify the Moon Phase section as it will cause
 errors.
 ==============================================================
 [MoonPhase]
-CurrentMoonPhase=Gibbous
-CurrentMoonTurn=3
+CurrentMoonPhase=Crescent
+CurrentMoonTurn=2
 
 [MoonPhaseTime]
 full=10
@@ -38,8 +38,8 @@ remove or modify the time of day section as it will cause
 errors.
 ==============================================================
 [TimeOfDay]
-CurrentTimeOfDay=Morning
-CurrentTimeOfDayTurn=2
+CurrentTimeOfDay=Noon
+CurrentTimeOfDayTurn=4
 
 [TimeOfDayTime]
 morning=2
@@ -62,7 +62,7 @@ UnderWater=false
 Inside=false
 Trees=1000
 CanDig=true
-
+zone=plains
 
 
 
@@ -71,8 +71,9 @@ Name=The Flat World
 Desc=You are standing in a rather large field.  $iif($readini($zone($get.zone($1)), $get.room($1), trees) > 0, You can see some trees scattered about)
 
 ; Exits
-ExitList=east
+ExitList=east.south
 east=1:0:0
+south=0:-1:0
 
 
 ; Room Flags
@@ -81,15 +82,14 @@ ShopName=
 WarmthNeeded=0
 UnderWater=false
 Inside=false
-zone=void
+zone=plains
 trees=1000
 CanDig=true
 
 ; Room Items
-items=Pickaxe
+items=Pickaxe.Hatchet
 Pickaxe=1000
-
-
+Hatchet=1000
 
 
 [1:0:0]
@@ -108,10 +108,150 @@ ShopName=
 WarmthNeeded=0
 UnderWater=false
 Inside=false
-zone=void
+zone=plains
 trees=1600
 
 ; Room Items
 Items=
 
 
+[0:-1:0]
+Name=Crystal Lake
+Desc=You are standing at the bank of Crystal Lake. The water is nice and blue.
+
+; Exits
+ExitList=north.down
+north=0:0:0
+down=0:-1:-1
+
+
+; Room Flags
+CanDig=false
+Shop=false
+ShopName=
+WarmthNeeded=0
+UnderWater=false
+Inside=false
+zone=plains
+trees=0
+
+; Room Items
+Items=
+
+
+[0:-1:-1]
+Name=Crystal Lake
+Desc=You are standing waist-deep in Crystal Lake. The water is cold, but refreshing.
+
+; Exits
+ExitList=up.down
+up=0:-1:0
+down=0:-1:-2
+
+
+; Room Flags
+CanDig=false
+Shop=false
+ShopName=
+WarmthNeeded=5
+UnderWater=false
+Inside=false
+zone=lake
+trees=0
+
+; Room Items
+Items=
+
+
+
+[0:-1:-2]
+Name=Swimming in Crystal Lake
+Desc=You are swimming in Crystal Lake. 
+
+; Exits
+ExitList=up.east.west.down
+up=0:-1:-1
+down=0:-1:-3
+east=1:-1:-2
+west=-1:-1:-2
+
+
+; Room Flags
+CanDig=false
+Shop=false
+ShopName=
+WarmthNeeded=7
+UnderWater=true
+Inside=false
+zone=lake
+trees=0
+
+; Room Items
+Items=
+
+
+[1:-1:-2]
+Name=Swimming in Crystal Lake
+Desc=You are swimming in Crystal Lake. 
+
+; Exits
+ExitList=west
+west=0:-1:-2
+
+
+; Room Flags
+CanDig=false
+Shop=false
+ShopName=
+WarmthNeeded=7
+UnderWater=true
+Inside=false
+zone=lake
+trees=0
+
+; Room Items
+Items=
+
+[-1:-1:-2]
+Name=Swimming in Crystal Lake
+Desc=You are swimming in Crystal Lake. 
+
+; Exits
+ExitList=east
+east=0:-1:-2
+
+
+; Room Flags
+CanDig=false
+Shop=false
+ShopName=
+WarmthNeeded=7
+UnderWater=true
+Inside=false
+zone=lake
+trees=0
+
+; Room Items
+Items=
+
+[0:-1:-3]
+Name=Swimming in Crystal Lake
+Desc=You are on the bank of Crystal Lake. 
+
+; Exits
+ExitList=up
+up=0:-1:-2
+
+
+; Room Flags
+CanDig=false
+Shop=false
+ShopName=
+WarmthNeeded=10
+UnderWater=true
+Inside=false
+zone=lake
+trees=0
+
+; Room Items
+Items=
