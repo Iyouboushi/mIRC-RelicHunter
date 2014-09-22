@@ -126,39 +126,64 @@ game.tick {
   ; give some HP back to those who need it if hunger is above 10
 
   var %chat.gametick 1
-  while ($chat(%chat.gametick) != $null) {  var %gametick.nick $chat(%chat.gametick) 
+  while ($chat(%chat.gametick) != $null) { 
+    var %gametick.nick $chat(%chat.gametick) 
+
+    ; lower hunger by 10
+    var %current.hunger $current.hunger(%gametick.nick)
+    dec %current.hunger 10
+    if (%current.hunger < 0) { var %current.hunger 0 }
+    writeini $char(%gametick.nick) currentstats hunger %current.hunger
+
+    if (%current.hunger <= 10) { 
+      if ($readini($char(%gametick.nick), settings, showhunger) = true) { $dcc.private.message(%gametick.nick, $readini(translation.dat, system, starving))  }
+    }
 
     ; If the person is not in battle, give back some HP and stamina
-
+    var %can.heal true
+    if ($in.battle(%gametick.nick) = true) { var %can.heal false } 
     if ($in.battle(%gametick.nick) = false) { 
 
       var %current.hp $current.hp(%gametick.nick)
-
-      if ((%current.hp < $base.hp(%gametick.nick)) && ($current.hunger(%gametick.nick)  >= 10))  { 
-        var %increase.hp $round($calc($base.hp(%gametick.nick) * .50),0)
-        inc %current.hp %increase.hp
-        if (%current.hp > $base.hp(%gametick.nick)) { var %current.hp $base.hp(%gametick.nick) }
-        writeini $char(%gametick.nick) currentstats hp %current.hp 
-      }
-
 
       var %current.stamina $current.stamina(%gametick.nick)
       inc %current.stamina 2
       if (%current.stamina > 50) { var %current.stamina 50 }
       writeini $char(%gametick.nick) currentstats stamina %current.stamina
 
-      ; lower hunger by 10
-      var %current.hunger $current.hunger(%gametick.nick)
-      dec %current.hunger 10
-      if (%current.hunger < 0) { var %current.hunger 0 }
-      writeini $char(%gametick.nick) currentstats hunger %current.hunger
-
-      if (%current.hunger <= 10) { 
-        if ($readini($char(%gametick.nick), settings, showhunger) = true) { $dcc.private.message(%gametick.nick, $readini(translation.dat, system, starving))  }
+      ; if the person is under water and can't swim, they need to lose hp.
+      if ($readini($zone($get.zone(%gametick.nick)), $get.room(%gametick.nick), UnderWater) = true) { 
+        var %water.breathing.level $skill.check(%gametick.nick, WaterBreathing)
+        if (%water.breathing.level >= 1) { var %canswim true }
+        if (%water.breathing.level <= 0) { 
+          ; check for the accessory
+          if ($accessory.type(%gametick.nick) = waterbreathing) { var %canswim true }
+        }
+        if (%canswim != true) { var %can.heal false }
       }
-    }
 
+
+      ; to do: later check for poison and other status effects that might stop healing.
+
+    } 
+
+    if (%can.heal = true) { $tick.hp.increase(%gametick.nick) }
+    if (%can.heal = false) { $tick.hp.decrease(%gametick.nick) }
     inc %chat.gametick 1
-  } 
+  }
 
+}
+
+
+tick.hp.increase {
+  if ((%current.hp < $base.hp($1)) && ($current.hunger($1)  >= 10))  { 
+    var %increase.hp $round($calc($base.hp($1) * .50),0)
+    inc %current.hp %increase.hp
+    if (%current.hp > $base.hp($1)) { var %current.hp $base.hp($1) }
+    writeini $char($1) currentstats hp %current.hp 
+  }
+}
+
+tick.hp.decrease {
+  echo -a decreasing hp for $1
 }
