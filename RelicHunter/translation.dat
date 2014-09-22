@@ -60,13 +60,26 @@ CurrentArmorFeetEquipped=Current Feet Armor
 CurrentArmorHandsEquipped=Current Hand Armor
 ViewWeaponList=$chr(3) $+ 3 $+  $+ %real.name 
 DiggingAction=$chr(3) $+ 3 $+  $+ $get.name($1) begins digging %direction $+ !
+ChoppingAction=$chr(3) $+ 3 $+  $+ $get.name($1) swings a hatchet at a tree!
 YouDigDirection=$chr(3) $+ 3 $+ You begin to dig %direction $+ !
+YouChopTree=$chr(3) $+ 3 $+ You swing your hatchet at a tree!
 YouLinkRooms=$chr(3) $+ 3 $+ You connect this area to the one in the %direction direction!
 CanDigHere=$chr(3) $+ 5 $+ You can dig here with a pickaxe.
 ViewItems=$chr(3) $+ 3 $+ You are carrying the following items: %items.list 
 CarryingNoItems=$chr(3) $+ 3 $+ You are not carrying any items
+TreeDoesNotFall=$chr(3) $+ 2 $+ The tree remains standing.
+TreeFalls=$chr(3) $+ 2 $+ The tree has fallen!
+ObtainedALog=$chr(3) $+ 2 $+ You have obtained 1 %log.name from the tree.
+TreeDroppedALog=$chr(3) $+ 4 $+ Your inventory is full so you were forced to drop 1 %log.name from the tree onto the ground.
+ViewPassiveSkills=$chr(3) $+ 3 $+ You know the following 12passive3 skills: %passive.skills.list
+ViewPassiveSkills2=$chr(3) $+ 3 $+  $+ %passive.skills.list2
+ViewActiveSkills=$chr(3) $+ 3 $+ You know the following 12active3 skills: %active.skills.list
+ViewActiveSkills2=$chr(3) $+ 3 $+  $+ %active.skills.list2
+ViewResistanceSkills=$chr(3) $+ 3 $+ You have the following 12resistances3: %resists.skills.list 
+ViewKillerTraitSkills=$chr(3) $+ 3 $+ You have the following 12monster killer traits3: %killer.skills.list 
+HaveNoSkills=$chr(3) $+ 3 $+ You know no skills..
 
- 
+
 
 ViewMyMechHP=$chr(3) $+ 3 $+  $+ %real.name $+ 's %mech.name HP is: $readini($char($nick), Mech, HpCurrent) $chr(47) $readini($char($nick), Mech, HpMax)  $+ $chr(91) $+ %hstats $+ 3 $+ $chr(93) 
 ViewMyTP=$chr(3) $+ 3 $+  $+ %real.name $+ 's TP is: $readini($char($nick), CurrentStats, TP) $chr(47) $readini($char($nick), BaseStats, TP) 
@@ -90,13 +103,7 @@ NoTechsForMe=$chr(3) $+ 3 $+  $+ %real.name does not know any techniques for $
 NoTechsForOthers=$chr(3) $+ 3 $+  $+ %real.name does not know any techniques for $gender($2) %weapon.equipped $+ .
 ViewIgnitions=$chr(3) $+ 3 $+  $+ %real.name has obtained the following Ignitions: %ignitions.list 
 NoIgnitions=$chr(3) $+ 3 $+  $+ %real.name does not know any Ignitions
-ViewPassiveSkills=$chr(3) $+ 3 $+  $+ %real.name knows the following 12passive3 skills: %passive.skills.list
-ViewPassiveSkills2=$chr(3) $+ 3 $+  $+ %passive.skills.list2
-ViewActiveSkills=$chr(3) $+ 3 $+  $+ %real.name knows the following 12active3 skills: %active.skills.list
-ViewActiveSkills2=$chr(3) $+ 3 $+  $+ %active.skills.list2
-ViewResistanceSkills=$chr(3) $+ 3 $+  $+ %real.name has the following 12resistances3: %resists.skills.list 
-ViewKillerTraitSkills=$chr(3) $+ 3 $+  $+ %real.name has the following 12monster killer traits3: %killer.skills.list 
-HasNoSkills=$chr(3) $+ 3 $+  $+ %real.name currently knows no skills.
+
 
 ViewSummonItems=$chr(3) $+ 3 $+  $+ %real.name has the following summon items: %summons.items.list 
 ViewShopResetItems=$chr(3) $+ 3 $+  $+ %real.name has the following shop lowering items: %reset.items.list 
@@ -276,10 +283,13 @@ ItemIsExclusive=$chr(3) $+ 4 $+ This item cannot be dropped or traded.
 RoomIsFull=$chr(3) $+ 4 $+ You are unable to drop any more items into this room.
 CannotDigDirection=$chr(3) $+ 4 $+ You are unable to dig in that direction.
 DoNotHavePickaxe=$chr(3) $+ 4 $+ You do not have a pickaxe.
+DoNotHaveHatchet=$chr(3) $+ 4 $+ You do not have a hatchet.
 DoNotHaveStamina=$chr(3) $+ 4 $+ You do not have enough stamina to do this.
 CannotDigHere=$chr(3) $+ 4 $+ You cannot dig here.
 TooColdToGoThere=$chr(3) $+ 4 $+ You are too cold to proceed $2 $+ .  Increase your warmth to continue on in that direction.
 CurrentlyInBattle=$chr(3) $+ 4 $+ You can not do this action while in battle!
+NoTreesHere=$chr(3) $+ 4 $+ You do not see any trees here.
+Can'tSwim=$chr(3) $+ 4 $+ You can not go any further without drowning.
 
 
 Can'tDualWield=$chr(3) $+ 4 $+ Error: %real.name does not have the necessary skill to dual wield.
