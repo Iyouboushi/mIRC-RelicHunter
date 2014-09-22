@@ -1,6 +1,6 @@
 ===================================================================
 This file is just to store the stats and augments of the equipment. 
-Valid EquipLocations are: Head, Body, Legs, Feet, Hands
+Valid EquipLocations are: Head, Body, Legs, Feet, Hands, Accessory
 ====================================================================
 
 ========
@@ -20,13 +20,15 @@ tp=0
 Str=0
 def=0
 int=0
-spd=0
+agi=0
+chr=0
 Augment=none
 EquipLocation=body
 cost=0
 SellPrice=1
 exclusive=true
 Warmth=1
+LevelRequirement=1
 
 
 ========
@@ -41,13 +43,15 @@ tp=0
 Str=0
 def=0
 int=0
-spd=0
+agi=0
+chr=0
 Augment=none
 EquipLocation=legs
 cost=0
 SellPrice=1
 exclusive=true
 Warmth=1
+LevelRequirement=1
 
 ========
 FEET
@@ -57,6 +61,30 @@ FEET
 ========
 HANDS
 ========
+
+
+========
+ACCESSORIES
+========
+
+[ScubaTank]
+Type=Accessory
+AccessoryType=WaterBreathing
+hp=0
+tp=0
+str=0
+def=0
+int=0
+agi=0
+chr=0
+Augment=none
+EquipLocation=accessory
+Cost=0
+SellPrice=1
+exclusive=false
+Warmth=0
+LevelRequirement=1
+
 
 
 =============================
