@@ -10,6 +10,12 @@ Desc=a metal pickaxe, used to dig
 Cost=
 sellprice=
 
+[Hatchet]
+Type=tool
+Desc=a wooden axe, used to chop down trees
+Cost=
+Sellprice=
+
 
 =========================
 ORES
@@ -31,6 +37,29 @@ Type=ore
 Desc=a small ore made of iron. It is unrefined.
 Cost=0
 SellPrice=2
+
+
+=========================
+LOGS
+=========================
+[AshLog]
+Type=log
+Desc=a wooden log from an ash tree.
+Cost=0
+SellPrice=1
+
+[ChestnutLog]
+Type=log
+Desc=a wooden log from a chestnut tree.
+Cost=0
+SellPrice=1
+
+[YewLog]
+Type=log
+Desc=a wooden log from a yew tree.
+Cost=0
+SellPrice=1
+
 
 
 =========================
