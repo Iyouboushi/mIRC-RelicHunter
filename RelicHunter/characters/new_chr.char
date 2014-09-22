@@ -4,7 +4,7 @@ Str=0
 Def=0
 Int=0
 Agi=0
-Char=0
+Chr=0
 Name=
 
 
@@ -15,7 +15,7 @@ Str=0
 Def=0
 Int=0
 Agi=0
-Char=0
+Chr=0
 Hunger=100
 Warmth=1
 Stamina=50
