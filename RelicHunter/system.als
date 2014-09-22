@@ -76,6 +76,7 @@ npc_path { return " $+ $mircdir $+ %npc_folder $+ " }
 zap_path { return " $+ $mircdir $+ %player_folder $+ %zapped_folder $+ " }
 zone_path { return " $+ $mircdir $+ %zones_folder $+ " }
 zoneores { return " $+ $mircdir $+ %zones_folder $+ $1 $+ \ores.lst" }
+zonelogs { return " $+ $mircdir $+ %zones_folder $+ $1 $+ \logs.lst" }
 zonemon { return " $+ $mircdir $+ %zones_folder $+ $1 $+ \monsters.db" }
 zonenpc { return " $+ $mircdir $+ %zones_folder $+ $1 $+ \npcs.db" }
 get.room {  return $readini($char($1), Location, Room) }
@@ -333,7 +334,20 @@ announce.room.action {
       }
       inc %chat.dig 1
     } 
+  }
 
+  if ($2 = chopping) { 
+    ; $1 = person chopping
+
+    var %user.location $get.zone.and.room($1)
+    var %chat.chop 1
+    while ($chat(%chat.chop) != $null) {  var %chop.nick $chat(%chat.chop) 
+      if (%chop.nick != $1) {
+        var %target.location $get.zone.and.room(%chop.nick)
+        if (%target.location = %user.location) { $dcc.private.message(%chop.nick, $readini(translation.dat, system, ChoppingAction)) }
+      }
+      inc %chat.chop 1
+    } 
   }
 
 
@@ -924,146 +938,6 @@ techs.get.list {
   return %tech.list
 }
 
-skills.list {
-  $passive.skills.list($1)
-  $active.skills.list($1)
-  set %resists.skills.list $resists.skills.list($1)
-  set %killer.skills.list $killer.skills.list($1)
-  unset %total.skills | unset %skill.name | unset %skill_level | unset %replacechar
-  return
-}
-
-passive.skills.list { 
-  ; CHECKING PASSIVE SKILLS
-  unset %passive.skills.list | unset %passive.skills.list2 | unset %total.skills
-  var %skills.lines $lines($lstfile(skills_passive.lst))
-
-  var %value 1
-  while (%value <= %skills.lines) {
-    set %skill.name $read -l $+ %value $lstfile(skills_passive.lst)
-    set %skill_level $readini($char($1), skills, %skill.name)
-
-    if ((%skill_level != $null) && (%skill_level >= 1)) { 
-      ; add the skill level to the skill list
-      var %skill_to_add %skill.name $+ $chr(040) $+ %skill_level $+ $chr(041) 
-      inc %total.skills 1
-      if (%total.skills > 13) {  %passive.skills.list2 = $addtok(%passive.skills.list2,%skill_to_add,46) }
-      else {  %passive.skills.list = $addtok(%passive.skills.list,%skill_to_add,46) }
-    }
-    inc %value 1
-  }
-
-  ; CLEAN UP THE LIST
-  if ($chr(046) isin %passive.skills.list) { set %replacechar $chr(044) $chr(032)
-    %passive.skills.list = $replace(%passive.skills.list, $chr(046), %replacechar)
-  }
-  if ($chr(046) isin %passive.skills.list2) { set %replacechar $chr(044) $chr(032)
-    %passive.skills.list2 = $replace(%passive.skills.list2, $chr(046), %replacechar)
-  }
-
-  unset %item.name | unset %item_amount | unset %number.of.items | unset %value 
-}
-
-active.skills.list {
-  ; CHECKING ACTIVE SKILLS
-  unset %active.skills.list | unset %active.skills.list2 | unset %total.skills
-  var %skills.lines $lines($lstfile(skills_active.lst))
-
-  var %value 1
-  while (%value <= %skills.lines) {
-    set %skill.name $read -l $+ %value $lstfile(skills_active.lst)
-    set %skill_level $readini($char($1), skills, %skill.name)
-
-    if ((%skill_level != $null) && (%skill_level >= 1)) { 
-      ; add the skill level to the skill list
-      inc %total.skills 1
-      var %skill_to_add %skill.name $+ $chr(040) $+ %skill_level $+ $chr(041) 
-      if (%total.skills > 13) { %active.skills.list2 = $addtok(%active.skills.list2,%skill_to_add,46) }
-      else { %active.skills.list = $addtok(%active.skills.list,%skill_to_add,46) }
-    }
-    inc %value 1 
-  }
-
-  var %active.skills $readini($dbfile(skills.db), Skills, activeSkills2)
-  var %number.of.skills $numtok(%active.skills, 46)
-  var %value 1
-  while (%value <= %number.of.skills) {
-    set %skill.name $gettok(%active.skills, %value, 46)
-    set %skill_level $readini($char($1), skills, %skill.name)
-
-    if ((%skill_level != $null) && (%skill_level >= 1)) { 
-      ; add the skill level to the skill list
-      inc %total.skills 1
-      var %skill_to_add %skill.name $+ $chr(040) $+ %skill_level $+ $chr(041) 
-      if (%total.skills > 13) { %active.skills.list2 = $addtok(%active.skills.list2,%skill_to_add,46) }
-      else { %active.skills.list = $addtok(%active.skills.list,%skill_to_add,46) }
-    }
-    inc %value 1 
-  }
-
-  ; CLEAN UP THE LIST
-  if ($chr(046) isin %active.skills.list) { set %replacechar $chr(044) $chr(032)
-    %active.skills.list = $replace(%active.skills.list, $chr(046), %replacechar)
-  }
-  if ($chr(046) isin %active.skills.list2) { set %replacechar $chr(044) $chr(032)
-    %active.skills.list2 = $replace(%active.skills.list2, $chr(046), %replacechar)
-  }
-
-  unset %item.name | unset %item_amount | unset %number.of.items | unset %value
-}
-
-resists.skills.list { 
-  ; CHECKING RESISTANCE SKILLS
-  unset %resists.skills.list
-  var %skills.lines $lines($lstfile(skills_resists.lst))
-
-  var %value 1
-  while (%value <= %skills.lines) {
-    set %skill.name $read -l $+ %value $lstfile(skills_resists.lst)
-    set %skill_level $readini($char($1), skills, %skill.name)
-
-    if ((%skill_level != $null) && (%skill_level >= 1)) { 
-      ; add the skill level to the skill list
-      var %skill_to_add %skill.name $+ $chr(040) $+ %skill_level $+ $chr(041) 
-      %resists.skills.list = $addtok(%resists.skills.list,%skill_to_add,46)
-    }
-    inc %value 1 
-  }
-
-  ; CLEAN UP THE LIST
-  set %replacechar $chr(044) $chr(032)
-  %resists.skills.list = $replace(%resists.skills.list, $chr(046), %replacechar)
-
-  unset %item.name | unset %item_amount | unset %number.of.items | unset %value
-  return %resists.skills.list
-}
-
-killer.skills.list { 
-  ; CHECKING KILLER SKILLS
-  unset %killer.skills.list
-
-  var %skills.lines $lines($lstfile(skills_killertraits.lst))
-
-  var %value 1
-  while (%value <= %skills.lines) {
-    set %skill.name $read -l $+ %value $lstfile(skills_killertraits.lst)
-    set %skill_level $readini($char($1), skills, %skill.name)
-
-    if ((%skill_level != $null) && (%skill_level >= 1)) { 
-      ; add the skill level to the skill list
-      var %skill_to_add %skill.name $+ $chr(040) $+ %skill_level $+ $chr(041) 
-      %killer.skills.list = $addtok(%killer.skills.list,%skill_to_add,46)
-    }
-    inc %value 1 
-  }
-
-  ; CLEAN UP THE LIST
-  set %replacechar $chr(044) $chr(032)
-  %killer.skills.list = $replace(%killer.skills.list, $chr(046), %replacechar)
-
-  unset %item.name | unset %item_amount | unset %number.of.items | unset %value
-  return %killer.skills.list
-}
 
 keys.list {
   unset %items.list | unset %gems.items.list | unset %summons.items.list | unset %keys.items.list | unset %misc.items.list | unset %reset.items.list 
