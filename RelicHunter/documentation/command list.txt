@@ -98,19 +98,35 @@ Shows you what gender you picked.
 !class
 Shows you what class you are.
 
+!skills
+skills
+
+Shows you what skills you currently know.
+
 !xp
 !stats
 !status
 !techs
-!skills
    None of these work as of 091814
+
+
+
 
 
 ;;;;;;;;;;;;;;;;;;;
 Equipment Commands
 ;;;;;;;;;;;;;;;;;;;
 
-None as of 091814
+!wear itemname
+wear itemname
+
+These commands will attempt to equip the item that you specify.  The bot will auto determine if it's an accessory, armor piece, or something that can't be worn and equip it in the specific slot.  [as of 092114 only accessories can be equipped]
+
+
+!remove itemname
+remove itemname
+
+These commands will attempt to unequip the item that you specify. The bot will auto determine if it's an accessory, armor piece, or something that can't be worn and remove it from the specific slot if it's equipped.  [as of 092114 only accessories can be unequipped]
 
 
 ;;;;;;;;;;;;;;;;;;;
