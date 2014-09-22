@@ -29,6 +29,19 @@ room.roomtotal {
 }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Returns total # of trees
+; in a room
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+room.treestotal {
+  ; $1 = the zone name
+  ; $2 = the room name
+
+  var %tree.count $readini($zone($1), $2, trees)
+  if (%tree.count = $null) { return 0 }
+  else { return %tree.count }
+}
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Returns the warmth
 ; needed to enter the room
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -259,6 +272,7 @@ room.create.dig {
     var %new.room.inside $readini($zone(%current.zone), defaultroom, inside)
     var %new.room.trees $readini($zone(%current.zone), defaultroom, trees)
     var %new.room.candig $readini($zone(%current.zone), defaultroom, candig)
+    var %new.room.zonetype $readini($zone(%current.zone), defaultroom, zone)
 
     writeini $zone(%current.zone) $3 Name %new.room.name
     writeini $zone(%current.zone) $3 Desc %new.room.desc
@@ -269,6 +283,7 @@ room.create.dig {
     writeini $zone(%current.zone) $3 Inside %new.room.inside
     writeini $zone(%current.zone) $3 Trees %new.room.trees
     writeini $zone(%current.zone) $3 CanDig %new.room.candig
+    writeini $zone(%current.zone) $3 zone %new.room.zonetype
 
     ; Link to nearby rooms, if necessary
     var %room.x $gettok($3, 1, 58) | var %room.y $gettok($3, 2, 58) | var %room.z $gettok($3, 3, 58)

@@ -20,6 +20,19 @@ go {
 
   ; Check for under water and water breathing tech
 
+  if ($readini($zone($get.zone($1)), %exit.location, UnderWater) = true) { 
+    var %water.breathing.level $skill.check($1, WaterBreathing)
+
+    if (%water.breathing.level >= 1) { var %canswim true }
+    if (%water.breathing.level <= 0) { 
+      ; check for the accessory
+      if ($accessory.type($1) = waterbreathing) { var %canswim true }
+    }
+
+    if (%canswim != true) { $dcc.private.message($1, $readini(translation.dat, errors, Can'tSwim)) | halt } 
+  }
+
+
   ; Check for warmth requirements
   if ($current.warmth($1) < $room.warmth.needed($1, %exit.location)) { $dcc.private.message($1, $readini(translation.dat, errors, TooColdToGoThere)) | halt }
 
